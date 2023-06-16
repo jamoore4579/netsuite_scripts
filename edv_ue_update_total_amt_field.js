@@ -19,25 +19,29 @@ define(['N/record'], function(record) {
       }
 
       if (customFormValue === '180') {
-        var erateAmountValue;
-        var quantityValue;
+        var lineCount = currentRecord.getLineCount({ sublistId: 'item' });
 
-        try {
-          erateAmountValue = currentRecord.getValue({ fieldId: 'custcol_syn_erateamount' });
-        } catch (e) {
-          // Handle the error
-          log.error({ title: 'Custom Field "erate_amount" Error', details: e.message });
+        for (var i = 0; i < lineCount; i++) {
+          var erateAmountValue;
+          var quantityValue;
+
+          try {
+            erateAmountValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: i });
+          } catch (e) {
+            // Handle the error
+            log.error({ title: 'Custom Field "custcol_erate_amount" Error', details: e.message });
+          }
+
+          try {
+            quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
+          } catch (e) {
+            // Handle the error
+            log.error({ title: 'Custom Field "quantity" Error', details: e.message });
+          }
+
+          // Log the values using log.audit
+          log.audit({ title: 'Line Item Values - Line ' + (i + 1), details: 'erate_amount: ' + erateAmountValue + ', quantity: ' + quantityValue });
         }
-
-        try {
-          quantityValue = currentRecord.getValue({ fieldId: 'quantity' });
-        } catch (e) {
-          // Handle the error
-          log.error({ title: 'Custom Field "quantity" Error', details: e.message });
-        }
-
-        // Log the values using log.audit
-        log.audit({ title: 'Custom Field Values', details: 'erate_amount: ' + erateAmountValue + ', quantity: ' + quantityValue });
       }
     }
   }
