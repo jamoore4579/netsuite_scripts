@@ -35,15 +35,18 @@ define(['N/record', 'N/log'], function(record, log) {
         }
       }
 
-      // Set the total values in a custom field
+      // Calculate the total amount
+      var totalAmount = totalErateAmount * totalQuantity;
+
+      // Set the total amount in the custom field
       try {
-        currentRecord.setValue({ fieldId: 'custcol_total_amt', value: totalErateAmount.toFixed(2) + ' / ' + totalQuantity });
+        currentRecord.setValue({ fieldId: 'custcol_total_amt', value: totalAmount.toFixed(2) });
 
         // Log the audit
-        log.audit({ title: 'Audit Log', details: 'Total Erate Amount: ' + totalErateAmount.toFixed(2) + ', Total Quantity: ' + totalQuantity });
+        log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
       } catch (e) {
         // Handle the error
-        log.error({ title: 'Setting Custom Field "custcol_total_amt" Error', details: e.message });
+        log.error({ title: 'Setting Custom Field "cust_total_field" Error', details: e.message });
       }
     }
 
