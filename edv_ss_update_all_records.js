@@ -12,7 +12,7 @@ define(['N/search', 'N/record'], function(search, record) {
         var savedSearch = search.load({ id: savedSearchId });
   
         // Run the saved search
-        var searchResult = savedSearch.run().getRange({ start: 0, end: 6000 });
+        var searchResult = savedSearch.run().getRange({ start: 0, end: 1000 });
   
         // Iterate through the search results
         for (var i = 0; i < searchResult.length; i++) {
