@@ -47,6 +47,32 @@ define(['N/record', 'N/log'], function(record, log) {
         // Handle the error
         log.error({ title: 'Setting Custom Field "cust_total_field" Error', details: e.message });
       }
+
+    } else if (customFormValue === '143') {
+      var rateValue;
+      var quantityValue;
+
+      try {
+        rateValue = currentRecord.getValue({ sublistId: 'item', fieldId: 'rate' });
+        quantityValue = currentRecord.getValue({ sublistId: 'item', fieldId: 'quantity' });
+      } catch (e) {
+        // Handle the error
+        log.error({ title: 'Custom Form "143" Error', details: e.message });
+      }
+
+      // Calculate the total amount
+      var totalAmount = parseFloat(rateValue || 0) * parseFloat(quantityValue || 0);
+
+      // Set the total amount in the custom field
+      try {
+        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalAmount.toFixed(2) });
+
+        // Log the audit
+        log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
+      } catch (e) {
+        // Handle the error
+        log.error({ title: 'Setting Custom Field "custbody_item_amount_total" Error', details: e.message });
+      }
     }
 
     return true; // Allow the record to be saved
