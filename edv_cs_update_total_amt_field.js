@@ -23,7 +23,7 @@ define(['N/record', 'N/log'], function(record, log) {
           itemName = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'item_display', line: i });
           erateAmountValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: i });
 
-          if (itemName !== '*') {
+          if (erateAmountValue !== 0) {
             totalErateAmount += parseFloat(erateAmountValue || 0);
             quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
             totalQuantity += parseFloat(quantityValue || 0);
