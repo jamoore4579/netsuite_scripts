@@ -15,23 +15,22 @@ define(['N/record', 'N/log'], function(record, log) {
       var totalQuantity = 0;
 
       for (var i = 0; i < lineCount; i++) {
+        var itemName;
         var erateAmountValue;
         var quantityValue;
 
         try {
+          itemName = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'item_display', line: i });
           erateAmountValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: i });
-          totalErateAmount += parseFloat(erateAmountValue || 0);
+
+          if (itemName !== '*') {
+            totalErateAmount += parseFloat(erateAmountValue || 0);
+            quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
+            totalQuantity += parseFloat(quantityValue || 0);
+          }
         } catch (e) {
           // Handle the error
           log.error({ title: 'Custom Field "custcol_syn_erateamount" Error', details: e.message });
-        }
-
-        try {
-          quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
-          totalQuantity += parseFloat(quantityValue || 0);
-        } catch (e) {
-          // Handle the error
-          log.error({ title: 'Custom Field "quantity" Error', details: e.message });
         }
       }
 
@@ -40,7 +39,7 @@ define(['N/record', 'N/log'], function(record, log) {
 
       // Set the total amount in the custom field
       try {
-        currentRecord.setValue({ fieldId: 'custcol_total_amt', value: totalAmount.toFixed(2) });
+        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalAmount.toFixed(2) });
 
         // Log the audit
         log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
