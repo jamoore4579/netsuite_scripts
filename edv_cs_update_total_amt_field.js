@@ -11,67 +11,64 @@ define(['N/record', 'N/log'], function(record, log) {
 
     if (customFormValue === '180') {
       var lineCount = currentRecord.getLineCount({ sublistId: 'item' });
-      var totalErateAmount = 0;
-      var totalQuantity = 0;
+      var totalLineAmount = 0;
 
       for (var i = 0; i < lineCount; i++) {
-        var itemName;
-        var erateAmountValue;
-        var quantityValue;
+        var lineAmount = 0;
 
         try {
-          itemName = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'item_display', line: i });
-          erateAmountValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: i });
+          var erateAmountValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: i });
+          var quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
 
-          if (erateAmountValue !== 0) {
-            totalErateAmount += parseFloat(erateAmountValue || 0);
-            quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
-            totalQuantity += parseFloat(quantityValue || 0);
-          }
+          lineAmount = parseFloat(erateAmountValue || 0) * parseFloat(quantityValue || 0);
         } catch (e) {
           // Handle the error
-          log.error({ title: 'Custom Field "custcol_syn_erateamount" Error', details: e.message });
+          log.error({ title: 'Line Calculation Error', details: e.message });
         }
+
+        totalLineAmount += lineAmount;
       }
 
-      // Calculate the total amount
-      var totalAmount = totalErateAmount * totalQuantity;
-
-      // Set the total amount in the custom field
+      // Set the total line amount in the custom field
       try {
-        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalAmount.toFixed(2) });
+        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
 
         // Log the audit
-        log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
+        log.audit({ title: 'Audit Log', details: 'Total Line Amount: ' + totalLineAmount.toFixed(2) });
       } catch (e) {
         // Handle the error
-        log.error({ title: 'Setting Custom Field "cust_total_field" Error', details: e.message });
+        log.error({ title: 'Setting Custom Field "Item Amount Total" Error', details: e.message });
       }
 
     } else if (customFormValue === '143') {
-      var rateValue;
-      var quantityValue;
+      var lineCount = currentRecord.getLineCount({ sublistId: 'item' });
+      var totalLineAmount = 0;
 
-      try {
-        rateValue = currentRecord.getValue({ sublistId: 'item', fieldId: 'rate' });
-        quantityValue = currentRecord.getValue({ sublistId: 'item', fieldId: 'quantity' });
-      } catch (e) {
-        // Handle the error
-        log.error({ title: 'Custom Form "143" Error', details: e.message });
+      for (var i = 0; i < lineCount; i++) {
+        var lineAmount = 0;
+
+        try {
+          var rateValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'rate', line: i });
+          var quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
+
+          lineAmount = parseFloat(rateValue || 0) * parseFloat(quantityValue || 0);
+        } catch (e) {
+          // Handle the error
+          log.error({ title: 'Line Calculation Error', details: e.message });
+        }
+
+        totalLineAmount += lineAmount;
       }
 
-      // Calculate the total amount
-      var totalAmount = parseFloat(rateValue || 0) * parseFloat(quantityValue || 0);
-
-      // Set the total amount in the custom field
+      // Set the total line amount in the custom field
       try {
-        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalAmount.toFixed(2) });
+        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
 
         // Log the audit
-        log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
+        log.audit({ title: 'Audit Log', details: 'Total Line Amount: ' + totalLineAmount.toFixed(2) });
       } catch (e) {
         // Handle the error
-        log.error({ title: 'Setting Custom Field "custbody_item_amount_total" Error', details: e.message });
+        log.error({ title: 'Setting Custom Field "Item Amount Total" Error', details: e.message });
       }
     }
 
