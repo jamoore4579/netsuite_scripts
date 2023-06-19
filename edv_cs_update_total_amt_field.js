@@ -34,7 +34,7 @@ define(['N/record', 'N/log'], function(record, log) {
         currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
 
         // Log the audit
-        log.audit({ title: 'Audit Log', details: 'Total Line Amount: ' + totalLineAmount.toFixed(2) });
+        log.audit({ title: 'Audit Log', details: 'Document Number: ' + docNumber + ', Total Line Amount: ' + totalLineAmount.toFixed(2) });
       } catch (e) {
         // Handle the error
         log.error({ title: 'Setting Custom Field "Item Amount Total" Error', details: e.message });
@@ -65,7 +65,7 @@ define(['N/record', 'N/log'], function(record, log) {
         currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
 
         // Log the audit
-        log.audit({ title: 'Audit Log', details: 'Total Line Amount: ' + totalLineAmount.toFixed(2) });
+        log.audit({ title: 'Audit Log', details: 'Document Number: ' + docNumber + ', Total Line Amount: ' + totalLineAmount.toFixed(2) });
       } catch (e) {
         // Handle the error
         log.error({ title: 'Setting Custom Field "Item Amount Total" Error', details: e.message });
