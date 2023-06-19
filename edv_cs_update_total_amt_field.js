@@ -33,6 +33,9 @@ define(['N/record', 'N/log'], function(record, log) {
       try {
         currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
 
+        // Get the document number
+        var docNumber = currentRecord.getValue({ fieldId: 'tranid' });
+
         // Log the audit
         log.audit({ title: 'Audit Log', details: 'Document Number: ' + docNumber + ', Total Line Amount: ' + totalLineAmount.toFixed(2) });
       } catch (e) {
@@ -63,6 +66,9 @@ define(['N/record', 'N/log'], function(record, log) {
       // Set the total line amount in the custom field
       try {
         currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
+
+        // Get the document number
+        var docNumber = currentRecord.getValue({ fieldId: 'tranid' });
 
         // Log the audit
         log.audit({ title: 'Audit Log', details: 'Document Number: ' + docNumber + ', Total Line Amount: ' + totalLineAmount.toFixed(2) });
