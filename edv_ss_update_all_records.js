@@ -25,8 +25,7 @@ define(['N/search', 'N/record'], function(search, record) {
           // Load the record
           var loadedRecord = record.load({ type: recordType, id: recordId });
   
-          // Update the record fields as needed
-          //loadedRecord.setValue({ fieldId: 'custrecord_custom_field', value: 'New Value' }); // Replace with your field ID and value
+          
   
           // Save the record
           try {
