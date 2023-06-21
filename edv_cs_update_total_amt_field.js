@@ -3,83 +3,148 @@
  * @NScriptType ClientScript
  * @NModuleScope SameAccount
  */
-define(['N/record', 'N/log'], function(record, log) {
+define(['N/log', 'N/record'], function(log, record) {
 
   function saveRecord(context) {
+    try {
+
     var currentRecord = context.currentRecord;
-    var customFormValue = currentRecord.getValue({ fieldId: 'customform' });
+    var customFormId = currentRecord.getValue({
+      fieldId: 'customform'
+    });
 
-    if (customFormValue === '180') {
-      var lineCount = currentRecord.getLineCount({ sublistId: 'item' });
-      var totalLineAmount = 0;
+    // Determine which custom form is being used
+    if (customFormId === '143') {
 
-      for (var i = 0; i < lineCount; i++) {
-        var lineAmount = 0;
+      var lineCount = currentRecord.getLineCount({
+        sublistId: 'item'
+      });
 
-        try {
-          var erateAmountValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: i });
-          var quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
-
-          lineAmount = parseFloat(erateAmountValue || 0) * parseFloat(quantityValue || 0);
-        } catch (e) {
-          // Handle the error
-          log.error({ title: 'Line Calculation Error', details: e.message });
-        }
-
-        totalLineAmount += lineAmount;
-      }
-
-      // Set the total line amount in the custom field
-      try {
-        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
-
-        // Get the document number
-        var docNumber = currentRecord.getValue({ fieldId: 'tranid' });
-
-        // Log the audit
-        log.audit({ title: 'Audit Log', details: 'Document Number: ' + docNumber + ', Total Line Amount: ' + totalLineAmount.toFixed(2) });
-      } catch (e) {
-        // Handle the error
-        log.error({ title: 'Setting Custom Field "Item Amount Total" Error', details: e.message });
-      }
-
-    } else if (customFormValue === '143') {
-      var lineCount = currentRecord.getLineCount({ sublistId: 'item' });
-      var totalLineAmount = 0;
+      var totalAmount = 0;
+      var hasTaxRate = false;
+      var taxRatePercent = 0;
 
       for (var i = 0; i < lineCount; i++) {
-        var lineAmount = 0;
+        var itemName = currentRecord.getSublistValue({
+          sublistId: 'item',
+          fieldId: 'item_display',
+          line: i
+        });
 
-        try {
-          var rateValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'rate', line: i });
-          var quantityValue = currentRecord.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: i });
+        if (itemName !== 'description') {
+          var quantity = currentRecord.getSublistValue({
+            sublistId: 'item',
+            fieldId: 'quantity',
+            line: i
+          });
 
-          lineAmount = parseFloat(rateValue || 0) * parseFloat(quantityValue || 0);
-        } catch (e) {
-          // Handle the error
-          log.error({ title: 'Line Calculation Error', details: e.message });
+          var rate = currentRecord.getSublistValue({
+            sublistId: 'item',
+            fieldId: 'rate',
+            line: i
+          });
+
+          totalAmount += quantity * rate;
+
+          if (!hasTaxRate) {
+            taxRatePercent = currentRecord.getSublistValue({
+              sublistId: 'item',
+              fieldId: 'taxrate1',
+              line: i
+            });
+
+            if (taxRatePercent) {
+              hasTaxRate = true;
+            }
+          }
         }
-
-        totalLineAmount += lineAmount;
       }
 
-      // Set the total line amount in the custom field
-      try {
-        currentRecord.setValue({ fieldId: 'custbody_item_amount_total', value: totalLineAmount.toFixed(2) });
-
-        // Get the document number
-        var docNumber = currentRecord.getValue({ fieldId: 'tranid' });
-
-        // Log the audit
-        log.audit({ title: 'Audit Log', details: 'Document Number: ' + docNumber + ', Total Line Amount: ' + totalLineAmount.toFixed(2) });
-      } catch (e) {
-        // Handle the error
-        log.error({ title: 'Setting Custom Field "Item Amount Total" Error', details: e.message });
+      if (hasTaxRate) {
+        var taxAmount = (totalAmount * taxRatePercent) / 100;
+        totalAmount += taxAmount;
       }
+
+      currentRecord.setValue({
+        fieldId: 'custbody_item_amount_total',
+        value: totalAmount.toFixed(2)
+      });
+
+      log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
+
+      // Add your custom logic for Custom Form 163 here
+
+    } else if (customFormId === '180') {
+
+      var lineCount = currentRecord.getLineCount({
+        sublistId: 'item'
+      });
+
+      var totalAmount = 0;
+      var hasTaxRate = false;
+      var taxRatePercent = 0;
+
+      for (var i = 0; i < lineCount; i++) {
+        var itemName = currentRecord.getSublistValue({
+          sublistId: 'item',
+          fieldId: 'item_display',
+          line: i
+        });
+
+        if (itemName !== 'description') {
+          var quantity = currentRecord.getSublistValue({
+            sublistId: 'item',
+            fieldId: 'quantity',
+            line: i
+          });
+
+          var rate = currentRecord.getSublistValue({
+            sublistId: 'item',
+            fieldId: 'custcol_syn_erateamount',
+            line: i
+          });
+
+          totalAmount += quantity * rate;
+
+          if (!hasTaxRate) {
+            taxRatePercent = currentRecord.getSublistValue({
+              sublistId: 'item',
+              fieldId: 'taxrate1',
+              line: i
+            });
+
+            if (taxRatePercent) {
+              hasTaxRate = true;
+            }
+          }
+        }
+      }
+
+      if (hasTaxRate) {
+        var taxAmount = (totalAmount * taxRatePercent) / 100;
+        totalAmount += taxAmount;
+      }
+
+      currentRecord.setValue({
+        fieldId: 'custbody_item_amount_total',
+        value: totalAmount.toFixed(2)
+      });
+
+      log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
+
     }
 
-    return true; // Allow the record to be saved
+    return true; // Allows the record to be saved
+
+  } catch (error) {
+    log.error({
+      title: 'Error in saveRecord',
+      details: 'An error occurred: ' + error.message
+    });
+
+    return false; // Prevents the record from being saved
   }
+}
 
   return {
     saveRecord: saveRecord
