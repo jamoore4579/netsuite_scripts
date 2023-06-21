@@ -34,10 +34,17 @@ define(['N/search', 'N/record', 'N/runtime', 'N/log'], function(search, record, 
             var total = 0;
 
             // Iterate through each item on the order
-            for (var j = 0; j < lineItemCount; j++) {
-              var rate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'rate', line: j }));
-              var quantity = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: j }));
+            for (var h = 0; h < lineItemCount; h++) {
+              var rate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'rate', line: h }));
+              var quantity = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: h }));
+              var taxCode = salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxcode', line: j });
               var lineTotal = rate * quantity;
+
+              if (taxCode !== '-Not Taxable-') {
+                var taxRate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxrate1', line: j }));
+                lineTotal *= (1 + taxRate / 100);
+              }
+
               total += lineTotal;
             }
 
@@ -56,7 +63,14 @@ define(['N/search', 'N/record', 'N/runtime', 'N/log'], function(search, record, 
             for (var j = 0; j < lineItemCount; j++) {
               var erate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: j }));
               var quantity = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: j }));
+              var taxCode = salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxcode', line: j });
               var lineTotal = erate * quantity;
+
+              if (taxCode !== '-Not Taxable-') {
+                var taxRate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxrate1', line: j }));
+                lineTotal *= (1 + taxRate / 100);
+              }
+              
               total += lineTotal;
             }
 
