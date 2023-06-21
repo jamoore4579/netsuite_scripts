@@ -13,6 +13,10 @@ define(['N/log', 'N/record'], function(log, record) {
       fieldId: 'customform'
     });
 
+    var documentNumber = currentRecord.getValue({
+      fieldId: 'tranid'
+    });
+
     // Determine which custom form is being used
     if (customFormId === '143') {
 
@@ -70,7 +74,7 @@ define(['N/log', 'N/record'], function(log, record) {
         value: totalAmount.toFixed(2)
       });
 
-      log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
+      log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
 
       // Add your custom logic for Custom Form 163 here
 
@@ -130,7 +134,7 @@ define(['N/log', 'N/record'], function(log, record) {
         value: totalAmount.toFixed(2)
       });
 
-      log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
+      log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
 
     }
 

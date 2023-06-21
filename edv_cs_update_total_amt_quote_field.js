@@ -72,9 +72,7 @@ define(['N/log', 'N/record'], function(log, record) {
         value: totalAmount.toFixed(2)
       });
 
-      log.audit({ title: 'Audit Log', details: 'Total Amount: ' + totalAmount.toFixed(2) });
-      
-      log.audit({ title: 'Log Audit', details: 'Document Number: ' + documentNumber });
+      log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
 
     } else if (customFormId === '181') {
 
@@ -132,9 +130,7 @@ define(['N/log', 'N/record'], function(log, record) {
         value: totalAmount.toFixed(2)
       });
 
-      log.audit({ title: 'Log Audit', details: 'Total Amount: ' + totalAmount.toFixed(2) });
-
-      log.audit({ title: 'Log Audit', details: 'Document Number: ' + documentNumber });
+      log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
 
     }
 
