@@ -17,76 +17,141 @@ define(['N/search', 'N/record', 'N/runtime', 'N/log'], function(search, record, 
       // Iterate through the search results
       for (var i = 0; i < searchResults.length; i++) {
         var searchResult = searchResults[i];
-        var salesOrderId = searchResult.getValue({ name: 'internalid' });
+        var quoteId = searchResult.getValue({ name: 'internalid' });
+        
         var documentNumber = searchResult.getValue({ name: 'tranid' });
+        
 
         try {
-          // Load the sales order record in edit mode
-          var salesOrder = record.load({ type: 'salesorder', id: salesOrderId, isDynamic: true });
+          // Load the Quote record in edit mode
+          var currentRecord = record.load({ type: 'estimate', id: quoteId, isDynamic: true });
 
           // Get the custom form ID
-          var currentRecord = context.currentRecord;
-          var customFormId = salesOrder.getValue({ fieldId: 'customform' });
+          //var currentRecord = context.currentRecord;
+          var customFormId = currentRecord.getValue({ fieldId: 'customform' });
 
           // Perform calculations based on the custom form
-          if (customFormId === '163') { //Standard quote form
-            var lineItemCount = salesOrder.getLineCount({ sublistId: 'item' });
-            var total = 0;
-
-            // Iterate through each item on the order
-            for (var h = 0; h < lineItemCount; h++) {
-              var rate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'rate', line: h }));
-              var quantity = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: h }));
-              var taxCode = salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxcode', line: j });
-              var lineTotal = rate * quantity;
-
-              if (taxCode !== '-Not Taxable-') {
-                var taxRate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxrate1', line: j }));
-                lineTotal *= (1 + taxRate / 100);
+          if (customFormId === '143') {
+            
+            var lineCount = currentRecord.getLineCount({ sublistId: 'item' });
+        
+              var totalAmount = 0;
+              var hasTaxRate = false;
+              var taxRatePercent = 0;
+        
+              for (var i = 0; i < lineCount; i++) {
+                var itemName = currentRecord.getSublistValue({
+                  sublistId: 'item',
+                  fieldId: 'item_display',
+                  line: i
+                });
+        
+                if (itemName !== 'description') {
+                  var quantity = currentRecord.getSublistValue({
+                    sublistId: 'item',
+                    fieldId: 'quantity',
+                    line: i
+                  });
+        
+                  var rate = currentRecord.getSublistValue({
+                    sublistId: 'item',
+                    fieldId: 'rate',
+                    line: i
+                  });
+        
+                  totalAmount += quantity * rate;
+        
+                  if (!hasTaxRate) {
+                    taxRatePercent = currentRecord.getSublistValue({
+                      sublistId: 'item',
+                      fieldId: 'taxrate1',
+                      line: i
+                    });
+        
+                    if (taxRatePercent) {
+                      hasTaxRate = true;
+                    }
+                  }
+                }
               }
-
-              total += lineTotal;
-            }
-
-            // Update custom field "item amount" with the total value
-            salesOrder.setValue({ fieldId: 'custbody_item_amount_total', value: total });
-
-            log.debug({ title: 'Sales Order ID', details: salesOrderId });
-            log.debug({ title: 'Total', details: total });
-            log.debug({ title: 'Document #', details: documentNumber})
-
-          } else if (customFormId === '181') { //e-Rate quote form
-            var lineItemCount = salesOrder.getLineCount({ sublistId: 'item' });
-            var total = 0;
-
-            // Iterate through each item on the order
-            for (var j = 0; j < lineItemCount; j++) {
-              var erate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'custcol_syn_erateamount', line: j }));
-              var quantity = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'quantity', line: j }));
-              var taxCode = salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxcode', line: j });
-              var lineTotal = erate * quantity;
-
-              if (taxCode !== '-Not Taxable-') {
-                var taxRate = parseFloat(salesOrder.getSublistValue({ sublistId: 'item', fieldId: 'taxrate1', line: j }));
-                lineTotal *= (1 + taxRate / 100);
+        
+              if (hasTaxRate) {
+                var taxAmount = (totalAmount * taxRatePercent) / 100;
+                totalAmount += taxAmount;
               }
-              
-              total += lineTotal;
-            }
+        
+              currentRecord.setValue({
+                fieldId: 'custbody_item_amount_total',
+                value: totalAmount.toFixed(2)
+              });
+        
+              log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
 
-            // Update custom field "item amount" with the total value
-            salesOrder.setValue({ fieldId: 'custbody_item_amount_total', value: total });
+          } else if (customFormId === '180') {
 
-            log.debug({ title: 'Sales Order ID', details: salesOrderId });
-            log.debug({ title: 'Total', details: total });
-            log.debug({ title: 'Document #', details: documentNumber})
+              var lineCount = currentRecord.getLineCount({
+                sublistId: 'item'
+              });
+        
+              var totalAmount = 0;
+              var hasTaxRate = false;
+              var taxRatePercent = 0;
+        
+              for (var i = 0; i < lineCount; i++) {
+                var itemName = currentRecord.getSublistValue({
+                  sublistId: 'item',
+                  fieldId: 'item_display',
+                  line: i
+                });
+        
+                if (itemName !== 'description') {
+                  var quantity = currentRecord.getSublistValue({
+                    sublistId: 'item',
+                    fieldId: 'quantity',
+                    line: i
+                  });
+        
+                  var rate = currentRecord.getSublistValue({
+                    sublistId: 'item',
+                    fieldId: 'custcol_syn_erateamount',
+                    line: i
+                  });
+        
+                  totalAmount += quantity * rate;
+        
+                  if (!hasTaxRate) {
+                    taxRatePercent = currentRecord.getSublistValue({
+                      sublistId: 'item',
+                      fieldId: 'taxrate1',
+                      line: i
+                    });
+        
+                    if (taxRatePercent) {
+                      hasTaxRate = true;
+                    }
+                  }
+                }
+              }
+        
+              if (hasTaxRate) {
+                var taxAmount = (totalAmount * taxRatePercent) / 100;
+                totalAmount += taxAmount;
+              }
+        
+              currentRecord.setValue({
+                fieldId: 'custbody_item_amount_total',
+                value: totalAmount.toFixed(2)
+              });
+        
+              log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
+
           }
 
-          // Save the sales order record
-          salesOrder.save();
+          // Save the quote record
+          currentRecord.save();
         } catch (ex) {
           // Log the error and continue processing other records
-          log.error({ title: 'Error processing Sales Order ID', details: salesOrderId });
+          log.error({ title: 'Error processing Quote ID', details: quoteId });
           log.error({ title: 'Error Details', details: ex.toString() });
         }
       }
