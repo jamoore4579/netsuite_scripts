@@ -10,9 +10,9 @@ define(['N/record'], function (record) {
       var currentRecord = context.currentRecord;
       var fieldId = context.fieldId;
 
-      // Check if the current form ID is '158'
+      // Check if the current form ID is '157'
       var currentFormId = currentRecord.getValue({ fieldId: 'customform' });
-      if (currentFormId !== '158') {
+      if (currentFormId !== '157') {
         // Skip the script execution for other forms
         return;
       }
@@ -47,6 +47,14 @@ define(['N/record'], function (record) {
             fieldId: 'duedate',
             value: dueDate
           });
+        } else if (priority === 'low') {
+          var today = new Date();
+          var dueDate = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000); // Adding 7 days (7 * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+
+          currentRecord.setValue({
+            fieldId: 'duedate',
+            value: dueDate
+          });
         }
       }
     }
@@ -55,4 +63,3 @@ define(['N/record'], function (record) {
       fieldChanged: fieldChanged
     };
   });
-  
