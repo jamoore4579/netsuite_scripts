@@ -47,7 +47,7 @@ define(['N/record'], function (record) {
             fieldId: 'duedate',
             value: dueDate
           });
-        } else if (priority === 'low') {
+        } else if (priority === 'LOW') {
           var today = new Date();
           var dueDate = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000); // Adding 7 days (7 * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
 
