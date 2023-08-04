@@ -12,7 +12,7 @@ define(['N/record'], function (record) {
 
       // Check if the current form ID is '160'
       var currentFormId = currentRecord.getValue({ fieldId: 'customform' });
-      if (currentFormId !== '160') {
+      if (currentFormId !== '158') {
         // Skip the script execution for other forms
         return;
       }
@@ -24,19 +24,19 @@ define(['N/record'], function (record) {
         });
   
         // Set the date based on the task type
-        if (tasktype === '2') {
+        if (tasktype === '101') {
           var today = new Date();
           var dueDate = new Date();
 
-          // Check if it's Thursday (day number 3, as Monday is day number 0)
-          if (today.getDay() === 3) {
+          // Check if it's Thursday (day number 4, as Sunday is day number 0)
+          if (today.getDay() === 4) {
             dueDate.setDate(today.getDate() + 4); // If Thursday, set due date 4 days later
           } else {
             dueDate.setDate(today.getDate() + 2); // Otherwise, set due date for 2 days out
           }
 
-          // Check if it's Friday (day number 4, as Monday is day number 0)
-          if (today.getDay() === 4) {
+          // Check if it's Friday (day number 5, as Sunday is day number 0)
+          if (today.getDay() === 5) {
             dueDate.setDate(today.getDate() + 4); // If Friday, set due date 4 days later
           } else {
             dueDate.setDate(today.getDate() + 2); // Otherwise, set due date for 2 days out
@@ -47,19 +47,19 @@ define(['N/record'], function (record) {
             value: dueDate
           });
 
-        } else if (tasktype === '3') {
+        } else if (tasktype === '102') {
           var today = new Date();
           var dueDate = new Date();
   
-          // Check if it's Thursday (day number 3, as Monday is day number 0)
-          if (today.getDay() === 3) {
+          // Check if it's Thursday (day number 4, as Sunday is day number 0)
+          if (today.getDay() === 4) {
             dueDate.setDate(today.getDate() + 6); // If Thursday, set due date 4 days later
           } else {
             dueDate.setDate(today.getDate() + 4); // Otherwise, set due date for 2 days out
           }
 
-          // Check if it's Friday (day number 4, as Monday is day number 0)
-          if (today.getDay() === 4) {
+          // Check if it's Friday (day number 5, as Sunday is day number 0)
+          if (today.getDay() === 5) {
             dueDate.setDate(today.getDate() + 6); // If Friday, set due date 4 days later
           } else {
             dueDate.setDate(today.getDate() + 4); // Otherwise, set due date for 2 days out
@@ -69,19 +69,19 @@ define(['N/record'], function (record) {
             fieldId: 'duedate',
             value: dueDate
           });
-        } else if (tasktype === '4') {
+        } else if (tasktype === '103') {
           var today = new Date();
           var dueDate = new Date();
 
-          // Check if it's Thursday (day number 3, as Monday is day number 0)
-          if (today.getDay() === 3) {
+          // Check if it's Thursday (day number 4, as Sunday is day number 0)
+          if (today.getDay() === 4) {
             dueDate.setDate(today.getDate() + 7); // If Thursday, set due date 4 days later
           } else {
             dueDate.setDate(today.getDate() + 4); // Otherwise, set due date for 2 days out
           }
 
-          // Check if it's Friday (day number 4, as Monday is day number 0)
-          if (today.getDay() === 4) {
+          // Check if it's Friday (day number 5, as Sunday is day number 0)
+          if (today.getDay() === 5) {
             dueDate.setDate(today.getDate() + 11); // If Friday, set due date 4 days later
           } else {
             dueDate.setDate(today.getDate() + 11); // Otherwise, set due date for 2 days out

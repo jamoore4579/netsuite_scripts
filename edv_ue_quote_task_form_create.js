@@ -11,11 +11,11 @@ define(['N/record', 'N/log'], function(record, log) {
           var currentRecord = scriptContext.newRecord;
   
           // Check if the custom form ID is '160'
-          if (currentRecord.getValue({ fieldId: 'customform' }) == '160') {
-            // Set the value of 'custevent_task_type' field to '2'
-            currentRecord.setValue({ fieldId: 'custevent_task_type', value: '2' });
+          if (currentRecord.getValue({ fieldId: 'customform' }) == '158') {
+            // Set the value of 'custevent_task_type' field to '101'
+            currentRecord.setValue({ fieldId: 'custevent_task_type', value: '101' });
 
-              // Set the initial due date based on vaule '2' 
+              // Set the initial due date based on vaule '101' 
               var today = new Date();
               var dueDate = new Date();
               //var currentDay = today.getDate()
