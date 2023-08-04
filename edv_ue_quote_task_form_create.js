@@ -22,18 +22,18 @@ define(['N/record', 'N/log'], function(record, log) {
 
               //log.audit({ title: 'What Day is it?', details: currentDay});
 
-              // Check if it's Thursday (day number 4, as Monday is day number 0)
+              // Check if it's Monday-Thursday (day number 4, as Monday is day number 0)
               if (today.getDay() === 3) {
-                dueDate.setDate(today.getDate() + 4); // If Thursday, set due date 4 days later
+                dueDate.setDate(today.getDate() + 1); // If Thursday, set due date 4 days later
               } else {
-                dueDate.setDate(today.getDate() + 2); // Otherwise, set due date for 2 days out
+                dueDate.setDate(today.getDate() + 1); // Otherwise, set due date for 2 days out
               }
 
               // Check if it's Friday (day number 5, as Sunday is day number 0)
               if (today.getDay() === 4) {
-                dueDate.setDate(today.getDate() + 4); // If Friday, set due date 4 days later
+                dueDate.setDate(today.getDate() + 3); // If Friday, set due date 4 days later
               } else {
-                dueDate.setDate(today.getDate() + 2); // Otherwise, set due date for 2 days out
+                dueDate.setDate(today.getDate() + 1); // Otherwise, set due date for 2 days out
               }
       
               currentRecord.setValue({
