@@ -29,17 +29,10 @@ define(['N/record'], function (record) {
           var dueDate = new Date();
 
           // Check if it's Thursday (day number 4, as Sunday is day number 0)
-          if (today.getDay() === 4) {
-            dueDate.setDate(today.getDate() + 4); // If Thursday, set due date 4 days later
-          } else {
-            dueDate.setDate(today.getDate() + 2); // Otherwise, set due date for 2 days out
-          }
-
-          // Check if it's Friday (day number 5, as Sunday is day number 0)
           if (today.getDay() === 5) {
-            dueDate.setDate(today.getDate() + 4); // If Friday, set due date 4 days later
+            dueDate.setDate(today.getDate() + 3); // If Thursday, set due date 4 days later
           } else {
-            dueDate.setDate(today.getDate() + 2); // Otherwise, set due date for 2 days out
+            dueDate.setDate(today.getDate() + 1); // Otherwise, set due date for 2 days out
           }
   
           currentRecord.setValue({
@@ -51,40 +44,38 @@ define(['N/record'], function (record) {
           var today = new Date();
           var dueDate = new Date();
   
-          // Check if it's Thursday (day number 4, as Sunday is day number 0)
-          if (today.getDay() === 4) {
-            dueDate.setDate(today.getDate() + 6); // If Thursday, set due date 4 days later
-          } else {
-            dueDate.setDate(today.getDate() + 4); // Otherwise, set due date for 2 days out
-          }
-
-          // Check if it's Friday (day number 5, as Sunday is day number 0)
+          // Check what is current day, as Sunday is day number 0
           if (today.getDay() === 5) {
-            dueDate.setDate(today.getDate() + 6); // If Friday, set due date 4 days later
+            dueDate.setDate(today.getDate() + 6); 
+          } else if (today.getDay() === 4) {
+            dueDate.setDate(today.getDate() + 6); 
+          } else if (today.getDay() === 3) {
+            dueDate.setDate(today.getDate() + 6); 
+          } else if (today.getDay() === 2) {
+            dueDate.setDate(today.getDate() + 6); 
           } else {
-            dueDate.setDate(today.getDate() + 4); // Otherwise, set due date for 2 days out
+            dueDate.setDate(today.getDate() + 4); 
           }
-  
           currentRecord.setValue({
             fieldId: 'duedate',
             value: dueDate
           });
+
         } else if (tasktype === '103') {
           var today = new Date();
           var dueDate = new Date();
 
-          // Check if it's Thursday (day number 4, as Sunday is day number 0)
-          if (today.getDay() === 4) {
-            dueDate.setDate(today.getDate() + 7); // If Thursday, set due date 4 days later
-          } else {
-            dueDate.setDate(today.getDate() + 4); // Otherwise, set due date for 2 days out
-          }
-
-          // Check if it's Friday (day number 5, as Sunday is day number 0)
+          // Check what is current day, as Sunday is day number 0
           if (today.getDay() === 5) {
-            dueDate.setDate(today.getDate() + 11); // If Friday, set due date 4 days later
+            dueDate.setDate(today.getDate() + 11);
+          } else if (today.getDay() === 4) {
+            dueDate.setDate(today.getDate() + 11); 
+          } else if (today.getDay() === 3) {
+            dueDate.setDate(today.getDate() + 9); 
+          } else if (today.getDay() === 2) {
+            dueDate.setDate(today.getDate() + 9); 
           } else {
-            dueDate.setDate(today.getDate() + 11); // Otherwise, set due date for 2 days out
+            dueDate.setDate(today.getDate() + 9);
           }
 
           currentRecord.setValue({
