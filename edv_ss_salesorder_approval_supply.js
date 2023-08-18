@@ -44,7 +44,7 @@ define(['N/search', 'N/record', 'N/log'], function(search, record, log) {
                 // Set the 'custbody_system_approved' field to 'Supply Chain'
                 salesOrder.setValue({
                     fieldId: 'custbody_system_approved',
-                    value: '1'
+                    value: 1
                 });
 
                 // Save the updated record
