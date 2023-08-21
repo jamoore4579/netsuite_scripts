@@ -27,7 +27,8 @@ define(['N/search', 'N/record', 'N/log'], function(search, record, log) {
                 // Load the Sales Order record
                 var salesOrder = record.load({
                     type: recordType,
-                    id: recordId
+                    id: recordId,
+                    isDynamic: true
                 });
 
                 // Get the current document number
