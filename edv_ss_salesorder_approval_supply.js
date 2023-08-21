@@ -51,6 +51,23 @@ define(['N/search', 'N/record', 'N/log'], function(search, record, log) {
                 // Save the updated record
                 salesOrder.save();
 
+                // Cancel the workflow associated with the record
+                var workflowInstanceId = salesOrder.getValue({
+                    fieldId: '126'
+                });
+
+                if (workflowInstanceId) {
+                    workflow.cancel({
+                        recordId: recordId,
+                        workflowInstanceId: workflowInstanceId
+                    });
+                }
+
+                log.audit({
+                    title: 'Workflow',
+                    details: 'Pending Workflow: ' + workflowInstanceId
+                });
+
                 // Log an audit entry about the update
                 log.audit({
                     title: 'Sales Order Status Update',
