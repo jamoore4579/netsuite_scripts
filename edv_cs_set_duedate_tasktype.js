@@ -82,6 +82,18 @@ define(['N/record'], function (record) {
             fieldId: 'duedate',
             value: dueDate
           });
+
+        } else if (tasktype === '106') {
+          var today = new Date();
+          var dueDate = new Date();
+
+          // Check if it's Thursday (day number 4, as Sunday is day number 0)
+          dueDate.setDate(today.getDate() + 0);
+
+          currentRecord.setValue({
+            fieldId: 'duedate',
+            value: dueDate
+          });
         }
       }
     }
