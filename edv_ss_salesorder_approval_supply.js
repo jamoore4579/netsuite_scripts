@@ -31,6 +31,21 @@ define(['N/search', 'N/record', 'N/log'], function(search, record, log) {
                     isDynamic: true
                 });
 
+                // Get the current customer ID
+                var customerId = salesOrder.getValue({
+                    fieldId: 'entity' // Replace with the actual field ID for customer reference
+                });
+
+                // Check if the customer ID is the one to ignore (e.g., "CUS782")
+                if (customerId === 'CUS782') {
+                    // Log a message to indicate that the order is being ignored
+                    log.audit({
+                        title: 'Sales Order Ignored',
+                        details: 'Sales Order ' + recordId + ' for customer ' + customerId + ' is being ignored.'
+                    });
+                    return true; // Continue processing the next result
+                }
+
                 // Get the current document number
                 var documentNumber = salesOrder.getValue({
                     fieldId: 'tranid'
