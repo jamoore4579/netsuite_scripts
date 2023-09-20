@@ -21,16 +21,15 @@ define(['N/record', 'N/log', 'N/ui/dialog'], function (record, log, dialog) {
             });
 
             // Get the Project Status
-            var projectStatus = project.getValue({
+            var projectStatusInternalId = project.getValue({
                 fieldId: 'entitystatus' // Adjust fieldId as per your setup
             });
 
-            console.log(projectStatus)
-
-            // Check if 'entitystatus' is 126
-            if (projectStatus === 126) {
-                projectStatus = '1. Initiation';
-            }
+            // Use getText to convert internal ID to text
+            var projectStatus = project.getText({
+                fieldId: 'entitystatus', // Adjust fieldId as per your setup
+                value: projectStatusInternalId
+            });
 
             // Update the Customer Project Status field on Sales Order
             currentRecord.setValue({
@@ -57,16 +56,15 @@ define(['N/record', 'N/log', 'N/ui/dialog'], function (record, log, dialog) {
                 });
 
                 // Get the Project Status
-                var projectStatus = project.getValue({
+                var projectStatusInternalId = project.getValue({
                     fieldId: 'entitystatus' // Adjust fieldId as per your setup
                 });
 
-                console.log(projectStatus)
-
-                // Check if 'entitystatus' is 126
-                if (projectStatus === 126) {
-                    projectStatus = '1. Initiation';
-                }
+                // Use getText to convert internal ID to text
+                var projectStatus = project.getText({
+                    fieldId: 'entitystatus', // Adjust fieldId as per your setup
+                    value: projectStatusInternalId
+                });
 
                 // Update the Customer Project Status field on Sales Order
                 currentRecord.setValue({
