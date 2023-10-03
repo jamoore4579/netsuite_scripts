@@ -51,7 +51,7 @@ define(['N/ui/serverWidget', 'N/record'], function (serverWidget, record) {
   
         // Create a new record (replace 'customrecord_your_record_type' with your custom record type)
         var newRecord = record.create({
-          type: 'customrecord_deal_registration', // Replace with your custom record type
+          type: 'vendor', // Replace with your custom record type
         });
   
         // Set field values
