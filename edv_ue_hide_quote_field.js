@@ -17,6 +17,10 @@ define(['N/ui/serverWidget'], function (serverWidget) {
 
             quoteField.updateDisplayType({displayType: serverWidget.FieldDisplayType.HIDDEN})
         }
+
+        if (context.type === context.UserEventType.CREATE) {
+            
+        }
     }
 
     return {
