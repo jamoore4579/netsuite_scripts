@@ -13,11 +13,13 @@ define(['N/record', 'N/ui/serverWidget'], function (record, serverWidget) {
             var fillAllBtn = form.addField({
                 id: 'custpage_fill_all_lines', // A valid form element name
                 type: serverWidget.FieldType.INLINEHTML,
-                label: 'New Record'
+                label: 'Deal Registration',
             });
 
+            
+
             // Set the default value of the button to HTML
-            fillAllBtn.defaultValue = '<button type="button" style="cursor: hand; margin-bottom: 10px; margin-top: 15px; width: 250px;" id="custpage_fill_all_lines" name="custpage_fill" onclick="fillLines(true); return false;">New Record</button>';
+            fillAllBtn.defaultValue = '<button type="button" style="cursor: hand; margin-bottom: 10px; margin-top: 15px; width: 250px;" id="custpage_fill_all_lines" name="custpage_fill" onclick="fillLines(true); return false;">New Deal Registration</button>';
         }
     }
 
@@ -25,3 +27,6 @@ define(['N/record', 'N/ui/serverWidget'], function (record, serverWidget) {
         beforeLoad: beforeLoad
     };
 });
+
+
+//https://5779703-sb1.app.netsuite.com/app/common/custom/custrecordentry.nl?rectype=651&whence=
