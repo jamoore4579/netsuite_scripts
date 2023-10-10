@@ -6,31 +6,20 @@
 define(['N/record'], function (record) {
    
     // Function to be executed when a field is changed
-    function fieldChanged(context) {
-        // Get the current record object
-        //var currentRecord = context.currentRecord;
-
-        // Get the field ID that triggered the change
-        var fieldId = context.fieldId;
-
-        // Check if a specific button was clicked
-        if (fieldId === 'custbody_deal_reg_123') {
-            // Your onClick logic here
-            alert('Button clicked!');
+    function pageInit(context) {
+        // Get a reference to the button element
+    var button = document.getElementById("custpage_custom_button");
+    
+        if (button) {
+            // Add an event listener to the button's click event
+            button.addEventListener("click", function() {
+                // Call the deal function when the button is clicked
+                deal(true);
+            });
         }
     }
-
-    // Function to be executed when the custom button is clicked
-    function onClickCustomButton() {
-        // Your onClick logic here
-        alert('Custom Button clicked!');
-    }
-
+    
     return {
-        fieldChanged: fieldChanged,
-        // Attach the onClickCustomButton function to the custom button
-        onClick: {
-            custpage_custom_button: onClickCustomButton
-        }
+        pageInit: pageInit
     };
 });
