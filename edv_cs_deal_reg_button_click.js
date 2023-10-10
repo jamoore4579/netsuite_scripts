@@ -3,16 +3,22 @@
  * @NScriptType ClientScript
  * @NModuleScope SameAccount
  */
-define(['N/record'], function (record) {
-   
-    // Function to be executed when a field is changed
+
+// Define the deal function globally
+function deal(clicked) {
+    if (clicked) {
+        alert('Button clicked!');
+    }
+}
+
+define([], function () {
     function pageInit(context) {
-        // Get a reference to the button element
-    var button = document.getElementById("custpage_custom_button");
-    
-        if (button) {
-            // Add an event listener to the button's click event
-            button.addEventListener("click", function() {
+        // Retrieve the button element by its ID
+        var customButton = document.getElementById('custpage_custom_button');
+
+        // Attach a click event listener to the button
+        if (customButton) {
+            customButton.addEventListener('click', function () {
                 // Call the deal function when the button is clicked
                 deal(true);
             });
