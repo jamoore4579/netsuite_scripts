@@ -24,7 +24,7 @@ define(['N/record'], function (record) {
         });
   
         // Set the date based on the task type
-        if (tasktype === '104') {
+        if (tasktype === '104' || tasktype === '107') {
           var today = new Date();
           var dueDate = new Date();
 
