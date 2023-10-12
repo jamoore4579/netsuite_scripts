@@ -60,7 +60,7 @@ define(['N/log', 'N/record'], function(log, record) {
                         totalAmount += quantity * rate;
                         costAmount += quantity * cost;
                         quoteDiff = totalAmount - costAmount
-                        quoteMargin = quoteDiff / totalAmount
+                        quoteMargin = (quoteDiff / totalAmount)*100
                     }
                 }
 
@@ -114,7 +114,7 @@ define(['N/log', 'N/record'], function(log, record) {
                         totalAmount += quantity * rate;
                         costAmount += quantity * cost;
                         quoteDiff = totalAmount - costAmount
-                        quoteMargin = quoteDiff / totalAmount
+                        quoteMargin = (quoteDiff / totalAmount)*100
                     }
                 }
 
@@ -125,7 +125,6 @@ define(['N/log', 'N/record'], function(log, record) {
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Cost: ' + costAmount.toFixed(2)});
-                log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Diff: ' + quoteDiff.toFixed(2)});
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Quote Margin: ' + quoteMargin.toFixed(0) }); 
           
               }
