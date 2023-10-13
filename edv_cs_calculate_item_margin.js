@@ -31,14 +31,14 @@ define(['N/log', 'N/record'], function(log, record) {
                 var quoteMargin = 0;
 
                 for (var i = 0; i < lineCount; i++) {
-                    
-                    var itemName = currentRecord.getSublistValue ({
+
+                    var itemType = currentRecord.getSublistValue ({
                         sublistId: 'item',
-                        fieldId: 'item_display',
+                        fieldId: 'itemtype',
                         line: i
                     })
 
-                    if (itemName !== 'description') {
+                    if (itemType !== 'Service') {
                         var quantity = currentRecord.getSublistValue({
                           sublistId: 'item',
                           fieldId: 'quantity',
