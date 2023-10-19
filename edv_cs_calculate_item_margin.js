@@ -19,6 +19,7 @@ define(['N/log', 'N/record'], function(log, record) {
             })
 
             //Determine which custom form is being used
+            //Determine which custom form is being used
             if (customFormId ==='163') {
 
                 var lineCount = currentRecord.getLineCount({
@@ -31,24 +32,31 @@ define(['N/log', 'N/record'], function(log, record) {
                 var quoteMargin = 0;
 
                 for (var i = 0; i < lineCount; i++) {
-                    
-                    var quantity = currentRecord.getSublistValue({
-                        sublistId: 'item',
-                        fieldId: 'quantity',
-                        line: i
-                    });
-            
-                    var rate = currentRecord.getSublistValue({
-                        sublistId: 'item',
-                        fieldId: 'rate',
-                        line: i
-                    });
 
-                    var cost = currentRecord.getSublistValue({
+                    var itemName = currentRecord.getSublistValue({
                         sublistId: 'item',
-                        fieldId: 'costestimaterate',
+                        fieldId: 'item_display',
                         line: i
                     });
+                    
+                        var quantity = currentRecord.getSublistValue({
+                            sublistId: 'item',
+                            fieldId: 'quantity',
+                            line: i
+                        });
+                
+                        var rate = currentRecord.getSublistValue({
+                            sublistId: 'item',
+                            fieldId: 'rate',
+                            line: i
+                        });
+
+                        var cost = currentRecord.getSublistValue({
+                            sublistId: 'item',
+                            fieldId: 'costestimaterate',
+                            line: i
+                        });
+                    
             
                     totalAmount += quantity * rate;
                     costAmount += quantity * cost;
@@ -57,10 +65,18 @@ define(['N/log', 'N/record'], function(log, record) {
                     
                 }
 
-                currentRecord.setValue({
-                    fieldId: 'custbody_quote_margin',
-                    value: (quoteMargin.toFixed(0) + '%')
-                });
+                if (quoteMargin !== null && !isNaN(quoteMargin)) {
+                    currentRecord.setValue({
+                            fieldId: 'custbody_quote_margin',
+                            value: quoteMargin.toFixed(0) + '%'
+                    });
+                   
+                  } else {
+                    currentRecord.setValue({
+                        fieldId: 'custbody_quote_margin',
+                        value: '0%'
+                    });
+                  }
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Cost: ' + costAmount.toFixed(2)});
@@ -76,6 +92,12 @@ define(['N/log', 'N/record'], function(log, record) {
                 var quoteMarginInv = 0;
 
                 for (var i = 0; i < lineCountInv; i++) {
+
+                    var itemName = currentRecord.getSublistValue({
+                        sublistId: 'item',
+                        fieldId: 'item_display',
+                        line: i
+                    });
                     
                     var itemType = currentRecord.getSublistValue ({
                         sublistId: 'item',
@@ -110,10 +132,18 @@ define(['N/log', 'N/record'], function(log, record) {
                     }
                 }
 
-                currentRecord.setValue({
-                    fieldId: 'custbody_quote_inv_margin',
-                    value: (quoteMarginInv.toFixed(0) + '%')
-                });
+                if (quoteMarginInv !== null && !isNaN(quoteMarginInv)) {
+                    currentRecord.setValue({
+                            fieldId: 'custbody_quote_inv_margin',
+                            value: quoteMarginInv.toFixed(0) + '%'
+                    });
+                   
+                  } else {
+                    currentRecord.setValue({
+                        fieldId: 'custbody_quote_inv_margin',
+                        value: '0%'
+                    });
+                  }
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Inventory Total Amount: ' + totalAmountInv.toFixed(2) });
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Inventory Total Cost: ' + costAmountInv.toFixed(2)});
@@ -129,6 +159,12 @@ define(['N/log', 'N/record'], function(log, record) {
                 var quoteMarginServ = 0;
 
                 for (var i = 0; i < lineCountServ; i++) {
+
+                    var itemName = currentRecord.getSublistValue({
+                        sublistId: 'item',
+                        fieldId: 'item_display',
+                        line: i
+                    });
                     
                     var itemType = currentRecord.getSublistValue ({
                         sublistId: 'item',
@@ -163,10 +199,18 @@ define(['N/log', 'N/record'], function(log, record) {
                     }
                 }
 
-                currentRecord.setValue({
-                    fieldId: 'custbody_quote_service_margin',
-                    value: (quoteMarginServ.toFixed(0) + '%')
-                });
+                if (quoteMarginServ !== null && !isNaN(quoteMarginServ)) {
+                   currentRecord.setValue({
+                           fieldId: 'custbody_quote_service_margin',
+                           value: quoteMarginServ.toFixed(0) + '%'
+                   });
+                  
+                 } else {
+                   currentRecord.setValue({
+                       fieldId: 'custbody_quote_service_margin',
+                       value: '0%'
+                   });
+                 }
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Total Amount: ' + totalAmountServ.toFixed(2) });
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Total Cost: ' + costAmountServ.toFixed(2)});
@@ -210,10 +254,18 @@ define(['N/log', 'N/record'], function(log, record) {
                     
                 }
 
-                currentRecord.setValue({
-                    fieldId: 'custbody_quote_margin',
-                    value: (quoteMargin.toFixed(0) + '%')
-                });
+                if (quoteMargin !== null && !isNaN(quoteMargin)) {
+                    currentRecord.setValue({
+                            fieldId: 'custbody_quote_margin',
+                            value: quoteMargin.toFixed(0) + '%'
+                    });
+                   
+                  } else {
+                    currentRecord.setValue({
+                        fieldId: 'custbody_quote_margin',
+                        value: '0%'
+                    });
+                  }
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Cost: ' + costAmount.toFixed(2)});
@@ -262,10 +314,18 @@ define(['N/log', 'N/record'], function(log, record) {
                     }
                 }
 
-                currentRecord.setValue({
-                    fieldId: 'custbody_quote_inv_margin',
-                    value: (quoteMarginInv.toFixed(0) + '%')
-                });
+                if (quoteMarginInv !== null && !isNaN(quoteMarginInv)) {
+                    currentRecord.setValue({
+                            fieldId: 'custbody_quote_inv_margin',
+                            value: quoteMarginInv.toFixed(0) + '%'
+                    });
+                   
+                  } else {
+                    currentRecord.setValue({
+                        fieldId: 'custbody_quote_inv_margin',
+                        value: '0%'
+                    });
+                  }
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Inventory Total Amount: ' + totalAmountInv.toFixed(2) });
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Inventory Total Cost: ' + costAmountInv.toFixed(2)});
@@ -314,10 +374,18 @@ define(['N/log', 'N/record'], function(log, record) {
                     }
                 }
 
-                currentRecord.setValue({
-                    fieldId: 'custbody_quote_service_margin',
-                    value: (quoteMarginServ.toFixed(0) + '%')
-                });
+                if (quoteMarginServ !== null && !isNaN(quoteMarginServ)) {
+                    currentRecord.setValue({
+                            fieldId: 'custbody_quote_service_margin',
+                            value: quoteMarginServ.toFixed(0) + '%'
+                    });
+                   
+                  } else {
+                    currentRecord.setValue({
+                        fieldId: 'custbody_quote_service_margin',
+                        value: '0%'
+                    });
+                  }
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Total Amount: ' + totalAmountServ.toFixed(2) });
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Total Cost: ' + costAmountServ.toFixed(2)});
