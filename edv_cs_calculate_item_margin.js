@@ -48,7 +48,7 @@ define(['N/log', 'N/record'], function(log, record) {
                         sublistId: 'item',
                         fieldId: 'costestimaterate',
                         line: i
-                        });
+                    });
             
                     totalAmount += quantity * rate;
                     costAmount += quantity * cost;
@@ -59,7 +59,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
                 currentRecord.setValue({
                     fieldId: 'custbody_quote_margin',
-                    value: quoteMargin.toFixed(0)
+                    value: (quoteMargin.toFixed(0) + '%')
                 });
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
@@ -76,7 +76,7 @@ define(['N/log', 'N/record'], function(log, record) {
                 var quoteMarginInv = 0;
 
                 for (var i = 0; i < lineCountInv; i++) {
-
+                    
                     var itemType = currentRecord.getSublistValue ({
                         sublistId: 'item',
                         fieldId: 'itemtype',
@@ -84,23 +84,24 @@ define(['N/log', 'N/record'], function(log, record) {
                     })
 
                     if (itemType !== 'Service') {
+
                         var quantity = currentRecord.getSublistValue({
-                          sublistId: 'item',
-                          fieldId: 'quantity',
-                          line: i
+                        sublistId: 'item',
+                        fieldId: 'quantity',
+                        line: i
                         });
-              
+            
                         var rate = currentRecord.getSublistValue({
-                          sublistId: 'item',
-                          fieldId: 'rate',
-                          line: i
+                        sublistId: 'item',
+                        fieldId: 'rate',
+                        line: i
                         });
 
                         var cost = currentRecord.getSublistValue({
                             sublistId: 'item',
                             fieldId: 'costestimaterate',
                             line: i
-                          });
+                        });
               
                         totalAmountInv += quantity * rate;
                         costAmountInv += quantity * cost;
@@ -111,7 +112,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
                 currentRecord.setValue({
                     fieldId: 'custbody_quote_inv_margin',
-                    value: quoteMarginInv.toFixed(0)
+                    value: (quoteMarginInv.toFixed(0) + '%')
                 });
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Inventory Total Amount: ' + totalAmountInv.toFixed(2) });
@@ -128,7 +129,7 @@ define(['N/log', 'N/record'], function(log, record) {
                 var quoteMarginServ = 0;
 
                 for (var i = 0; i < lineCountServ; i++) {
-
+                    
                     var itemType = currentRecord.getSublistValue ({
                         sublistId: 'item',
                         fieldId: 'itemtype',
@@ -136,23 +137,24 @@ define(['N/log', 'N/record'], function(log, record) {
                     })
 
                     if (itemType !== 'InvtPart') {
+
                         var quantity = currentRecord.getSublistValue({
-                          sublistId: 'item',
-                          fieldId: 'quantity',
-                          line: i
+                        sublistId: 'item',
+                        fieldId: 'quantity',
+                        line: i
                         });
-              
+            
                         var rate = currentRecord.getSublistValue({
-                          sublistId: 'item',
-                          fieldId: 'rate',
-                          line: i
+                        sublistId: 'item',
+                        fieldId: 'rate',
+                        line: i
                         });
 
                         var cost = currentRecord.getSublistValue({
                             sublistId: 'item',
                             fieldId: 'costestimaterate',
                             line: i
-                          });
+                        });
               
                         totalAmountServ += quantity * rate;
                         costAmountServ += quantity * cost;
@@ -163,7 +165,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
                 currentRecord.setValue({
                     fieldId: 'custbody_quote_service_margin',
-                    value: quoteMarginServ.toFixed(0)
+                    value: (quoteMarginServ.toFixed(0) + '%')
                 });
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Total Amount: ' + totalAmountServ.toFixed(2) });
@@ -210,7 +212,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
                 currentRecord.setValue({
                     fieldId: 'custbody_quote_margin',
-                    value: quoteMargin.toFixed(0)
+                    value: (quoteMargin.toFixed(0) + '%')
                 });
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Total Amount: ' + totalAmount.toFixed(2) });
@@ -262,7 +264,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
                 currentRecord.setValue({
                     fieldId: 'custbody_quote_inv_margin',
-                    value: quoteMarginInv.toFixed(0)
+                    value: (quoteMarginInv.toFixed(0) + '%')
                 });
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Inventory Total Amount: ' + totalAmountInv.toFixed(2) });
@@ -314,7 +316,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
                 currentRecord.setValue({
                     fieldId: 'custbody_quote_service_margin',
-                    value: quoteMarginServ.toFixed(0)
+                    value: (quoteMarginServ.toFixed(0) + '%')
                 });
 
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Total Amount: ' + totalAmountServ.toFixed(2) });

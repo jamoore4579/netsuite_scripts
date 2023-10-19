@@ -95,7 +95,7 @@ define(['N/log', 'N/record'], function(log, record) {
           line: i
         });
 
-        if (itemName !== 'description') {
+        if (itemName !== '*') {
           var quantity = currentRecord.getSublistValue({
             sublistId: 'item',
             fieldId: 'quantity',
