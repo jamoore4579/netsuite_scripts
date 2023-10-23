@@ -45,7 +45,9 @@ define(['N/record', 'N/email', 'N/runtime', 'N/format'], function (record, email
                 var newDueDate = formatDateWithoutTime(newTask.getValue({ fieldId: fieldIdToMonitor }));
                 var assignedUser = newTask.getText({ fieldId: 'assigned' });
 
-                sendDueDateChangeNotification(newTask, oldDueDate, newDueDate, assignedUser);
+                if (oldDueDate !== newDueDate) {
+                    sendDueDateChangeNotification(newTask, oldDueDate, newDueDate, assignedUser);
+                }
             }
         }
     }
