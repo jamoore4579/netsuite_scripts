@@ -26,36 +26,45 @@ define(['N/record', 'N/email', 'N/runtime', 'N/search', 'N/format'], function (r
                 var taskCreatorId = newRecord.getValue({ fieldId: 'owner' });
                 var assigneeId = newRecord.getValue({ fieldId: 'assignee' });
                 
-                // Get the names of the task creator and assignee
+                // Get the name of the task creator
                 var taskCreatorName = getEmployeeName(taskCreatorId);
                 var assigneeName = getEmployeeName(assigneeId);
                 
-                // Build the email message with multiple lines
-                var message = 'The due date for task #' + taskId + ' has been changed.\n\n';
-                message += 'Task Creator: ' + taskCreatorName + '\n';
-                message += 'Assigned To: ' + assigneeName + '\n';
-                message += 'New Due Date: ' + newDueDate + '\n';
-                message += 'Old Due Date: ' + oldDueDate;
-                
-                // Send a notification to the task creator
-                var subject = 'Task Due Date Changed';
-                email.send({
-                    author: runtime.getCurrentUser().id,
-                    recipients: taskCreatorName, // Send the email to the task creator by name
-                    subject: subject,
-                    body: message,
-                });
+                // Check if the task creator name is not empty and not undefined
+                if (taskCreatorName) {
+                    // Build the email message with multiple lines
+                    var message = 'The due date for task #' + taskId + ' has been changed.\n\n';
+                    message += 'Task Creator: ' + taskCreatorName + '\n';
+                    message += 'Assigned To: ' + assigneeName + '\n';
+                    message += 'New Due Date: ' + newDueDate + '\n';
+                    message += 'Old Due Date: ' + oldDueDate;
+                    
+                    // Send a notification to the task creator
+                    var subject = 'Task Due Date Changed';
+                    email.send({
+                        author: runtime.getCurrentUser().id,
+                        recipients: taskCreatorName,
+                        subject: subject,
+                        body: message,
+                    });
+                } else {
+                    log.error('Invalid or Empty Email Address', 'The task creator email address is not valid or empty.');
+                }
             }
         }
     }
     
     function getEmployeeName(employeeId) {
-        var employeeLookup = search.lookupFields({
-            type: search.Type.EMPLOYEE,
-            id: employeeId,
-            columns: ['entityid'] // 'entityid' represents the employee name
-        });
-        return employeeLookup.entityid;
+        if (employeeId) {
+            var employeeLookup = search.lookupFields({
+                type: search.Type.EMPLOYEE,
+                id: employeeId,
+                columns: ['entityid'] // 'entityid' represents the employee name
+            });
+            return employeeLookup.entityid;
+        } else {
+            return 'Unassigned'; // Provide a default value if the assignee is not set
+        }
     }
     
     // Expose the function to be called before record submission
