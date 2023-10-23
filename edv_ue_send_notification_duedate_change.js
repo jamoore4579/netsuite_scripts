@@ -1,68 +1,71 @@
 /**
+ * NetSuite User Event Script
+ * Script Type: User Event
+ * Script Deployment: [Your preferred deployment]
+ * Description: Monitor task due date changes and notify the task creator.
+ */
+
+/**
  * @NApiVersion 2.0
  * @NScriptType UserEventScript
  * @NModuleScope SameAccount
  */
 
-// Import required modules
-define(['N/record', 'N/email', 'N/runtime', 'N/search', 'N/format'], function (record, email, runtime, search, format) {
+define(['N/record', 'N/email', 'N/runtime'], function (record, email, runtime) {
+
+    /**
+     * Function to check if a field has been changed on a record
+     * @param {object} newRecord - The new task record
+     * @param {object} oldRecord - The old task record
+     * @param {string} fieldId - The ID of the field to check for changes
+     * @returns {boolean} - True if the field has changed, false otherwise
+     */
+    function hasFieldChanged(newRecord, oldRecord, fieldId) {
+        var newValue = newRecord.getValue({ fieldId: fieldId });
+        var oldValue = oldRecord.getValue({ fieldId: fieldId });
+        return newValue !== oldValue;
+    }
+
+    /**
+     * Function to send an email notification
+     * @param {object} task - The updated task record
+     * @param {string} oldDueDate - The original due date
+     * @param {string} newDueDate - The new due date
+     * @param {string} assignedUser - The user assigned to the task
+     */
+    function sendDueDateChangeNotification(task, oldDueDate, newDueDate, assignedUser) {
+        var taskCreator = task.getValue({ fieldId: 'owner' });
+        var emailSubject = 'Task Due Date Change Notification';
+        var emailBody = 'The due date of a task has been changed.\n\n';
+        emailBody += 'Original Due Date: ' + oldDueDate + '\n';
+        emailBody += 'New Due Date: ' + newDueDate + '\n';
+        emailBody += 'Assigned User: ' + assignedUser + '\n';
+
+        // Send the email
+        email.send({
+            author: runtime.getCurrentUser().id,
+            recipients: taskCreator,
+            subject: emailSubject,
+            body: emailBody
+        });
+    }
 
     function beforeSubmit(context) {
         if (context.type === context.UserEventType.EDIT) {
-            var newRecord = context.newRecord;
-            var oldRecord = context.oldRecord;
+            var newTask = context.newRecord;
+            var oldTask = context.oldRecord;
+            var fieldIdToMonitor = 'duedate';
 
-            // Get the new and old due date values
-            var newDueDate = newRecord.getValue({ fieldId: 'duedate' });
-            var oldDueDate = oldRecord.getValue({ fieldId: 'duedate' });
+            if (hasFieldChanged(newTask, oldTask, fieldIdToMonitor)) {
+                var oldDueDate = oldTask.getValue({ fieldId: fieldIdToMonitor });
+                var newDueDate = newTask.getValue({ fieldId: fieldIdToMonitor });
+                var assignedUser = newTask.getText({ fieldId: 'assigned' });
 
-            // Format the new and old due date values to exclude the time
-            newDueDate = format.format({ value: newDueDate, type: format.Type.DATE });
-            oldDueDate = format.format({ value: oldDueDate, type: format.Type.DATE });
-
-            if (newDueDate !== oldDueDate) {
-                var taskId = newRecord.id;
-                var taskCreatorId = newRecord.getValue({ fieldId: 'owner' });
-                var assigneeId = newRecord.getValue({ fieldId: 'assignee' });
-
-                // Check if the task creator ID is not empty and not undefined
-                if (taskCreatorId) {
-                    // Build the email message with multiple lines
-                    var message = 'The due date for task #' + taskId + ' has been changed.\n\n';
-                    message += 'Task Creator ID: ' + taskCreatorId + '\n';
-                    message += 'Assigned To: ' + getEmployeeName(assigneeId) + '\n';
-                    message += 'New Due Date: ' + newDueDate + '\n';
-                    message += 'Old Due Date: ' + oldDueDate;
-
-                    // Send a notification to the task creator
-                    var subject = 'Task Due Date Changed';
-                    email.send({
-                        author: runtime.getCurrentUser().id,
-                        recipients: taskCreatorId, // Use the ID instead of the name
-                        subject: subject,
-                        body: message,
-                    });
-                } else {
-                    log.error('Invalid or Empty Task Creator ID', 'The task creator ID is not valid or empty.');
-                }
+                sendDueDateChangeNotification(newTask, oldDueDate, newDueDate, assignedUser);
             }
         }
     }
 
-    function getEmployeeName(employeeId) {
-        if (employeeId) {
-            var employeeLookup = search.lookupFields({
-                type: search.Type.EMPLOYEE,
-                id: employeeId,
-                columns: ['entityid'] // 'entityid' represents the employee name
-            });
-            return employeeLookup.entityid;
-        } else {
-            return 'Unassigned'; // Provide a default value if the assignee is not set
-        }
-    }
-
-    // Expose the function to be called before record submission
     return {
         beforeSubmit: beforeSubmit
     };
