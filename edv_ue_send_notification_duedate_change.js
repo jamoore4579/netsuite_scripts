@@ -19,11 +19,13 @@ define(['N/record', 'N/email', 'N/runtime'], function (record, email, runtime) {
             if (newDueDate !== oldDueDate) {
                 var taskId = newRecord.id;
                 var taskCreator = newRecord.getValue({ fieldId: 'owner' });
-
-                //Send a notification to the task creator
-                var recipientEmail = runtime.getCurrentUser().email;
-                var subject = 'Task Due Date Changed';
-                var message = 'The Due Date for task #' + taskId + ' has ben changed.';
+                var assignee = newRecord.getValue({ fieldId: 'assignee' });
+                
+                // Build the email message with multiple lines
+                var message = 'The due date for task #' + taskId + ' has been changed.\n\n';
+                message += 'Task Creator: ' + taskCreator + '\n';
+                message += 'New Due Date: ' + newDueDate + '\n';
+                message += 'Old Due Date: ' + oldDueDate;
 
                 email.send({
                     author: runtime.getCurrentUser().id,
