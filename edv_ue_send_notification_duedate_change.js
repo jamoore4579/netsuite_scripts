@@ -11,7 +11,7 @@
  * @NModuleScope SameAccount
  */
 
-define(['N/record', 'N/email', 'N/runtime'], function (record, email, runtime) {
+define(['N/record', 'N/email', 'N/runtime', 'N/format'], function (record, email, runtime, format) {
 
     /**
      * Function to check if a field has been changed on a record
@@ -27,6 +27,15 @@ define(['N/record', 'N/email', 'N/runtime'], function (record, email, runtime) {
     }
 
     /**
+     * Function to format a date field without the time component
+     * @param {Date} date - The date to format
+     * @returns {string} - The formatted date string (without time)
+     */
+    function formatDateWithoutTime(date) {
+        return format.format({ value: date, type: format.Type.DATE });
+    }
+
+    /**
      * Function to send an email notification
      * @param {object} task - The updated task record
      * @param {string} oldDueDate - The original due date
@@ -34,7 +43,7 @@ define(['N/record', 'N/email', 'N/runtime'], function (record, email, runtime) {
      * @param {string} assignedUser - The user assigned to the task
      */
     function sendDueDateChangeNotification(task, oldDueDate, newDueDate, assignedUser) {
-        var taskCreator = task.getValue({ fieldId: 'owner' });
+        var taskCreator = task.getValue({ fieldId: 'owner' }); // Change to the actual field ID for the task creator
         var emailSubject = 'Task Due Date Change Notification';
         var emailBody = 'The due date of a task has been changed.\n\n';
         emailBody += 'Original Due Date: ' + oldDueDate + '\n';
@@ -54,12 +63,12 @@ define(['N/record', 'N/email', 'N/runtime'], function (record, email, runtime) {
         if (context.type === context.UserEventType.EDIT) {
             var newTask = context.newRecord;
             var oldTask = context.oldRecord;
-            var fieldIdToMonitor = 'duedate';
+            var fieldIdToMonitor = 'duedate'; // Change to the actual field ID for the due date
 
             if (hasFieldChanged(newTask, oldTask, fieldIdToMonitor)) {
-                var oldDueDate = oldTask.getValue({ fieldId: fieldIdToMonitor });
-                var newDueDate = newTask.getValue({ fieldId: fieldIdToMonitor });
-                var assignedUser = newTask.getText({ fieldId: 'assigned' });
+                var oldDueDate = formatDateWithoutTime(oldTask.getValue({ fieldId: fieldIdToMonitor }));
+                var newDueDate = formatDateWithoutTime(newTask.getValue({ fieldId: fieldIdToMonitor }));
+                var assignedUser = newTask.getText({ fieldId: 'assigned' }); // Change to the actual field ID for the assigned user
 
                 sendDueDateChangeNotification(newTask, oldDueDate, newDueDate, assignedUser);
             }
