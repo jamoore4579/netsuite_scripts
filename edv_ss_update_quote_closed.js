@@ -6,7 +6,7 @@
 
 define(['N/search', 'N/record', 'N/log'], function (search, record, log) {
 
-    function updateRecords() {
+    function execute(context) {
         try {
             // Define the saved search internal ID
             var savedSearchId = '1839';
@@ -24,27 +24,21 @@ define(['N/search', 'N/record', 'N/log'], function (search, record, log) {
                 // Update the record
                 var recordType = result.recordType;
 
-                // Create an object with fields to update
-                var fieldsToUpdate = {
-                    status: 14,
-                    custbody_lost_reason: 6
-                };
-
-                // Update the record using submitFields
-                var recordIdAfterUpdate = record.submitFields({
-                    type: recordType,
-                    id: recordId,
-                    values: fieldsToUpdate
-                });
-
-                // Log the results
-                if (recordIdAfterUpdate) {
-                    log.audit('Record Updated', 'Record ID: ' + recordIdAfterUpdate);
-                } else {
-                    log.error('Record Update Failed', 'Record ID: ' + recordId);
+                // Check if custbodyproduct_service_quote field has no value and set it to 4
+                var serviceQuoteValue = result.getValue('custbodyproduct_service_quote');
+                if (!serviceQuoteValue) {
+                    // Use the record module to update the record
+                    var recordObj = record.load({
+                        type: recordType,
+                        id: recordId
+                    });
+                    recordObj.setValue('custbodyproduct_service_quote', 4);
+                    recordObj.save(); // Save the updated record
+                    updated = true;
                 }
 
-                return true; // Continue processing additional records
+                // Continue processing additional records
+                return true;
             });
 
         } catch (e) {
@@ -53,6 +47,6 @@ define(['N/search', 'N/record', 'N/log'], function (search, record, log) {
     }
 
     return {
-        execute: updateRecords
+        execute: execute
     };
 });
