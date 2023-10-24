@@ -5,42 +5,49 @@
  */
 
 define(['N/search', 'N/record', 'N/log'], function (search, record, log) {
-
-    function execute(context) {
+    
+    /**
+     * Main function for the scheduled script
+     */
+    function execute() {
         try {
-            // Define the saved search internal ID
+            // Define your saved search ID
             var savedSearchId = '1839';
 
             // Load the saved search
-            var searchObj = search.load({
+            var mySearch = search.load({
                 id: savedSearchId
             });
 
-            // Run the saved search
-            searchObj.run().each(function (result) {
-                // Get the internal ID of the record
-                var recordId = result.id;
+            // Run the search and process the results
+            mySearch.run().each(function (result) {
+                try {
+                    // Get the record ID from the search result
+                    var recordId = result.id;
 
-                // Update the record
-                var recordType = result.recordType;
-
-                // Check if custbodyproduct_service_quote field has no value and set it to 4
-                var serviceQuoteValue = result.getValue('custbodyproduct_service_quote');
-                if (!serviceQuoteValue) {
-                    // Use the record module to update the record
-                    var recordObj = record.load({
-                        type: recordType,
-                        id: recordId
+                    // Load the record by ID
+                    var myRecord = record.load({
+                        type: record.Type.ESTIMATE,
+                        id: recordId,
                     });
-                    recordObj.setValue('custbodyproduct_service_quote', 4);
-                    recordObj.save(); // Save the updated record
-                    updated = true;
+
+                    // Update the fields
+                    myRecord.setValue('status', 14);
+                    myRecord.setValue('custbody_lost_reason', 6);
+                    myRecord.setValue('custbodyproduct_service_quote', 4);
+
+                    // Save the record
+                    var recordIdAfterUpdate = myRecord.save();
+
+                    // Log the results
+                    log.audit('Record Updated', 'Record ID: ' + recordIdAfterUpdate);
+                } catch (e) {
+                    log.error('Error Updating Record', e.message);
                 }
 
-                // Continue processing additional records
+                // Continue processing the next result
                 return true;
             });
-
         } catch (e) {
             log.error('Error', e.message);
         }

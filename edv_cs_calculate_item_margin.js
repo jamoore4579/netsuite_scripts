@@ -20,7 +20,6 @@ define(['N/log', 'N/record'], function(log, record) {
             })
 
             //Determine which custom form is being used
-            //Determine which custom form is being used
             if (customFormId ==='163' || customFormId ==='192') {
 
                 var lineCount = currentRecord.getLineCount({
