@@ -32,8 +32,8 @@ define(['N/search', 'N/record', 'N/log'], function (search, record, log) {
                     });
 
                     // Update the fields
-                    myRecord.setValue('status', 14);
-                    myRecord.setValue('custbody_lost_reason', 6);
+                    myRecord.setValue('entitystatus', 14);
+                    myRecord.setValue('custbody_lost_reason', 8);
                     myRecord.setValue('custbodyproduct_service_quote', 4);
 
                     // Save the record
