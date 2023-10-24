@@ -2,6 +2,7 @@
  * @NApiVersion 2.x
  * @NScriptType ClientScript
  * @NModuleScope SameAccount
+ * form 192
  */
 
 define(['N/log', 'N/record'], function(log, record) {
@@ -20,7 +21,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
             //Determine which custom form is being used
             //Determine which custom form is being used
-            if (customFormId ==='163') {
+            if (customFormId ==='163' || customFormId ==='192') {
 
                 var lineCount = currentRecord.getLineCount({
                     sublistId: 'item'
