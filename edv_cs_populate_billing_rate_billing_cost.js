@@ -37,12 +37,21 @@ function (currentRecord, record) {
                 isDynamic: true
             });
 
-            var fieldNameValue = customRecordLookup.getValue({
+            var techRateValue = customRecordLookup.getValue({
                 fieldId: 'name'
             });
+
+            var billRateValue = customRecordLookup.getValue({
+                fieldId: 'custrecord_tech_bill_rate'
+            });
+
+            var costRateValue = customRecordLookup.getValue({
+                fieldId: 'custrecord_tech_cost_rate'
+            });
             
-            if (fieldNameValue) {
-                console.log('Billing Class Value is ' + billingClass + '. Field Name Value: ' + fieldNameValue);
+            if (techRateValue) {
+                console.log('Billing Class Value is ' + billingClass + '. Field Name Value: ' + techRateValue);
+                console.log('Project Rates - Bill: ' + billRateValue + ' Cost: ' + costRateValue);
             }
         }
     }
