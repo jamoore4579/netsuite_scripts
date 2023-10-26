@@ -3,35 +3,47 @@
  * @NScriptType ClientScript
  * @NModuleScope SameAccount
  */
-
-define(['N/record', 'N/currentRecord'], function (record, currentRecord) {
-
+define(['N/currentRecord', 'N/record'],
+function (currentRecord, record) {
+    
     function pageInit(context) {
-        var currentRecord = context.currentRecord;
-
-        // Get the Billing Class from the Employee record
-        var billingClass = currentRecord.getValue({
+        // Get the current record
+        var currentRecordObj = currentRecord.get();
+        
+        // Get the value of the "billingclass" field
+        var billingClass = currentRecordObj.getValue({
             fieldId: 'billingclass'
         });
-
-        console.log('Billing Class: ' + billingClass);
-
-        // Check if billing class value is 1
-        if (billingClass === '1') {
-            // Retrieve the field name value of ID 1 from customrecord653
-            var customRecordId = 1;
+        
+        // Define an array of billing classes and their corresponding custom record IDs
+        var billingClasses = {
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+            5: 5,
+            6: 6,
+            7: 7,
+            8: 8
+        };
+        
+        if (billingClasses.hasOwnProperty(billingClass)) {
+            var customRecordId = billingClasses[billingClass];
             var customRecordType = 'customrecord653';
-
-            var customRecordLookup = search.lookupFields({
+            
+            var customRecordLookup = record.load({
                 type: customRecordType,
                 id: customRecordId,
-                columns: ['name']
-            })
+                isDynamic: true
+            });
 
-            var fieldNameValue = customRecordLookup.fieldname;
-
+            // Replace 'fieldname' with the actual field name you want to retrieve
+            var fieldNameValue = customRecordLookup.getValue({
+                fieldId: 'fieldname'
+            });
+            
             if (fieldNameValue) {
-                console.log('Billing Class Value is 1. Field Name Value: ' + fieldNameValue);
+                console.log('Billing Class Value is ' + billingClass + '. Field Name Value: ' + fieldNameValue);
             }
         }
     }
