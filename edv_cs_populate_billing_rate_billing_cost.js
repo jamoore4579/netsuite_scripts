@@ -37,9 +37,8 @@ function (currentRecord, record) {
                 isDynamic: true
             });
 
-            // Replace 'fieldname' with the actual field name you want to retrieve
             var fieldNameValue = customRecordLookup.getValue({
-                fieldId: 'fieldname'
+                fieldId: 'name'
             });
             
             if (fieldNameValue) {
