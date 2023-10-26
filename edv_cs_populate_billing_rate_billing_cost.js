@@ -52,6 +52,26 @@ function (currentRecord, record) {
             if (techRateValue) {
                 console.log('Billing Class Value is ' + billingClass + '. Field Name Value: ' + techRateValue);
                 console.log('Project Rates - Bill: ' + billRateValue + ' Cost: ' + costRateValue);
+
+                // Update the "custentity_billing_rate" field on the employee record
+                var employeeRecord = record.load({
+                    type: record.Type.EMPLOYEE, // Use the correct record type for employees
+                    id: currentRecordObj.id,
+                    isDynamic: true
+                });
+
+                employeeRecord.setValue({
+                    fieldId: 'custentity_billing_rate',
+                    value: billRateValue
+                });
+
+                employeeRecord.setValue({
+                    fieldId: 'custentity_cost_rate',
+                    value: costRateValue
+                });
+                
+                // Save the employee record with the updated value
+                employeeRecord.save();
             }
         }
     }
