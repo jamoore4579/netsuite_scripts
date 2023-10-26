@@ -7,25 +7,32 @@
 define(['N/record', 'N/currentRecord'], function (record, currentRecord) {
 
     function pageInit(context) {
-        try {
-            var currentRecordObj = currentRecord.get();
-            var billingClass = currentRecordObj.getValue({
-                fieldId: 'billingclass'
-            });
+        var currentRecord = context.currentRecord;
 
-            if (billingClass == 5) {
-                currentRecordObj.setValue({
-                    fieldId: 'custentity_billing_rate',
-                    value: 100.00
-                });
-                currentRecordObj.setValue({
-                    fieldId: 'custentity_cost_rate',
-                    value: 80.00
-                });
+        // Get the Billing Class from the Employee record
+        var billingClass = currentRecord.getValue({
+            fieldId: 'billingclass'
+        });
+
+        console.log('Billing Class: ' + billingClass);
+
+        // Check if billing class value is 1
+        if (billingClass === '1') {
+            // Retrieve the field name value of ID 1 from customrecord653
+            var customRecordId = 1;
+            var customRecordType = 'customrecord653';
+
+            var customRecordLookup = search.lookupFields({
+                type: customRecordType,
+                id: customRecordId,
+                columns: ['name']
+            })
+
+            var fieldNameValue = customRecordLookup.fieldname;
+
+            if (fieldNameValue) {
+                console.log('Billing Class Value is 1. Field Name Value: ' + fieldNameValue);
             }
-
-        } catch (e) {
-            console.error('An error occurred: ' + e);
         }
     }
 
