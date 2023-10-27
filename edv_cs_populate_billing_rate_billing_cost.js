@@ -53,9 +53,8 @@ function (currentRecord, record) {
                 console.log('Billing Class Value is ' + billingClass + '. Field Name Value: ' + techRateValue);
                 console.log('Project Rates - Bill: ' + billRateValue + ' Cost: ' + costRateValue);
 
-                // Update the "custentity_billing_rate" field on the employee record
                 var employeeRecord = record.load({
-                    type: record.Type.EMPLOYEE, // Use the correct record type for employees
+                    type: record.Type.EMPLOYEE,
                     id: currentRecordObj.id,
                     isDynamic: true
                 });
@@ -70,8 +69,6 @@ function (currentRecord, record) {
                     value: costRateValue
                 });
                 
-                // Save the employee record with the updated value
-                employeeRecord.save();
             }
         }
     }
