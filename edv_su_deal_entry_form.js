@@ -37,12 +37,14 @@ define(['N/ui/serverWidget', 'N/currentRecord', 'N/record'], function (serverWid
                 label: 'Save'
             });
 
-            // Add a cancel button and associated JavaScript function to close the window
-            form.addButton({
+            // Add a cancel button and associated JavaScript to close the window
+            var cancelButton = form.addButton({
                 id: 'custpage_cancel_button',
-                label: 'Cancel',
-                functionName: 'closeWindow()'
+                label: 'Cancel'
             });
+
+            // Include client script to close the window
+            cancelButton.clientScriptFileId = 24316; // Replace with the actual file ID of your client script
 
             // Write the response
             context.response.writePage(form);
@@ -68,8 +70,3 @@ define(['N/ui/serverWidget', 'N/currentRecord', 'N/record'], function (serverWid
         onRequest: onRequest
     };
 });
-
-// JavaScript function to close the window
-function closeWindow() {
-    window.close();
-}
