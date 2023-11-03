@@ -37,9 +37,9 @@ define(['N/record'], function (record) {
         // Set priority to 'High' for task type 108 or 109
         currentRecord.setValue({
           fieldId: 'priority',
-          value: 'High'
+          value: 'HIGH'
         });
-        
+
       } else if (tasktype === '104' || tasktype === '107') {
         // Check if it's Friday (day number 5, as Sunday is day number 0)
         if (today.getDay() >= 3 && today.getDay() <= 5) {
