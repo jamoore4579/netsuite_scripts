@@ -5,7 +5,7 @@
  */
 
 define(['N/record'], function (record) {
-  
+
   function fieldChanged(context) {
     var currentRecord = context.currentRecord;
     var fieldId = context.fieldId;
@@ -31,16 +31,23 @@ define(['N/record'], function (record) {
         if (today.getDay() >= 3 && today.getDay() <= 5) {
           dueDate.setDate(today.getDate() + 5); // If day 3, 4, or 5, set due date 5 days later
         } else {
-          dueDate.setDate(today.getDate() + 3); // Otherwise, set due date for 3 day out
+          dueDate.setDate(today.getDate() + 3); // Otherwise, set due date for 3 days out
         }
 
+        // Set priority to 'High' for task type 108 or 109
+        currentRecord.setValue({
+          fieldId: 'priority',
+          value: 'High'
+        });
+        
       } else if (tasktype === '104' || tasktype === '107') {
         // Check if it's Friday (day number 5, as Sunday is day number 0)
         if (today.getDay() >= 3 && today.getDay() <= 5) {
           dueDate.setDate(today.getDate() + 5); // If day 3, 4, or 5, set due date 5 days later
         } else {
-          dueDate.setDate(today.getDate() + 1); // Otherwise, set due date for 1 day out
+          dueDate.setDate(today.getDate() + 1); // Otherwise, set due date for 3 days out
         }
+
       } else if (tasktype === '') {
         // Check if it's Friday (day number 5, as Sunday is day number 0)
         if (today.getDay() >= 3 && today.getDay() <= 5) {
