@@ -1,8 +1,10 @@
 /**
  * @NApiVersion 2.x
  * @NScriptType ClientScript
+ * @NModuleScope Public
  */
-define(['N/log', 'N/record', 'N/currentRecord'], function (log, record, currentRecord) {
+
+define(['N/log', 'N/record', 'N/currentRecord', 'N/ui/dialog'], function (log, record, currentRecord, dialog) {
 
     function pageInit(context) {
         // This function runs when the page is initialized
@@ -31,23 +33,31 @@ define(['N/log', 'N/record', 'N/currentRecord'], function (log, record, currentR
             });
 
             // Get the value of the 'item_display' field
-            var itemDisplayValue = currentRecordObj.getSublistValue({
-                sublistId: 'item',
-                fieldId: 'item_display',
-                line: lineNumber
-            });
+            //var itemDisplayValue = currentRecordObj.getSublistValue({
+                //sublistId: 'item',
+                //fieldId: 'item_display',
+                //line: lineNumber
+            //});
 
             // Log a message to the console with line number and item_display value
             log.debug({
                 title: 'Record Line Added',
-                details: 'Record line added to the item sublist, Line Number: ' + lineNumber + ', Item Display Value: ' + itemDisplayValue
+                details: 'Record line added to the item sublist, Line Number: ' + lineNumber + ', Item Value: ' + itemInternalId
             });
 
             // Check if the added item has an internal ID of 5828
             if (itemInternalId == 5828) {
-                alert('Do not add item');
+                showPopup('There is a known issue with the Mitel 6940w IP Phone that is unresolved.  Do NOT quote this without Byron’s approval first.');
             }
         }
+    }
+
+    // Display a pop-up
+    function showPopup (msgText) {
+        dialog.alert({
+            title: 'Warning',
+            message: msgText
+        })
     }
 
     // Add event handlers
