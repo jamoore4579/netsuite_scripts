@@ -23,6 +23,13 @@ define(['N/log', 'N/record', 'N/currentRecord'], function (log, record, currentR
             // The line number of the added record is the last line
             var lineNumber = lineCount - 1;
 
+            // Get the internal ID of the added item
+            var itemInternalId = currentRecordObj.getSublistValue({
+                sublistId: 'item',
+                fieldId: 'item',
+                line: lineNumber
+            });
+
             // Get the value of the 'item_display' field
             var itemDisplayValue = currentRecordObj.getSublistValue({
                 sublistId: 'item',
@@ -35,6 +42,11 @@ define(['N/log', 'N/record', 'N/currentRecord'], function (log, record, currentR
                 title: 'Record Line Added',
                 details: 'Record line added to the item sublist, Line Number: ' + lineNumber + ', Item Display Value: ' + itemDisplayValue
             });
+
+            // Check if the added item has an internal ID of 5828
+            if (itemInternalId == 5828) {
+                alert('Do not add item');
+            }
         }
     }
 
