@@ -94,6 +94,11 @@ define(['N/record', 'N/log', 'N/task'],
                             value: customerId // Set the customer (company) on record
                         });
 
+                        taskRecord.setValue({
+                            fieldId: 'custevent_task_type',
+                            value: 105 // Set the task type on record
+                        });
+
                         // Set the assigned user ID based on the state
                         if (state != 'MS') {
                             taskRecord.setValue({
