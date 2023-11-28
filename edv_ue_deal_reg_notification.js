@@ -14,6 +14,7 @@ define(['N/record', 'N/log', 'N/task'],
          */
 
         function afterSubmit(context) {
+            
 
             // Get the new record
             var newRecord = context.newRecord;
@@ -23,7 +24,12 @@ define(['N/record', 'N/log', 'N/task'],
                 fieldId: 'custbody_deal_registration'
             });
 
-            if (isDealRegistration) {
+            // Check if the task has already been created for this record
+            var taskCreated = newRecord.getValue({
+                fieldId: 'custbody_deal_task_created'
+            })
+
+            if (isDealRegistration && !taskCreated) {
                 try {
                     // Load the current record to get additional information
                     var opportunityRecord = record.load({
@@ -129,6 +135,19 @@ define(['N/record', 'N/log', 'N/task'],
                         // Save the task record
                         var taskId = taskRecord.save();
 
+                        // Update the custom field to indicate that the task has been created
+                        record.submitFields({
+                            type: record.Type.OPPORTUNITY,
+                            id: newRecord.id,
+                            values: {
+                                custbody_deal_task_created: true
+                            },
+                            options: {
+                                enableSourcing: false,
+                                ignoreMandatoryFields: true
+                            }
+                        });
+
                         // Log audit information
                         log.audit({
                             title: 'Task Created',
@@ -149,11 +168,17 @@ define(['N/record', 'N/log', 'N/task'],
                         details: e
                     });
                 }
-            } else {
+            } else if (!isDealRegistration) {
                 // Log audit information if custbody_deal_registration is false
                 log.audit({
                     title: 'Task Not Created',
                     details: 'Task creation skipped because custbody_deal_registration is false for Opportunity ID: ' + newRecord.id
+                });
+            } else if (taskCreated) {
+                // Log audit information if task has already been created for this record
+                log.audit({
+                    title: 'Task Already Created',
+                    details: 'Task creation skipped because a task has already been created for Opportunity ID: ' + newRecord.id
                 });
             }
         }
