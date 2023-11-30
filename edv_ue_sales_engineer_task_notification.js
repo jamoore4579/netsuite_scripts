@@ -57,6 +57,9 @@ define(['N/record', 'N/log', 'N/task'],
                         fieldId: 'tranid'
                     });
 
+                    // Get the transaction ID (tranid) from the Opportunity record
+                    var internalId = opportunityRecord.id;
+
                     // Check if the transactionNumber is a valid value
                     if (transactionNumber) {
                         // Create a task record
@@ -78,7 +81,7 @@ define(['N/record', 'N/log', 'N/task'],
 
                         //taskRecord.setValue({
                             //fieldId: 'transaction',
-                            //value: transactionNumber
+                            //value: internalId
                         //});
 
                         taskRecord.setValue({
@@ -114,15 +117,6 @@ define(['N/record', 'N/log', 'N/task'],
                             });
                         }
 
-                        //var today = new Date();
-                        //var dueDate = new Date();
-
-                        //if (today.getDay() === 5) {
-                            //dueDate.setDate(today.getDate() + 3);
-                        //} else {
-                            //dueDate.setDate(today.getDate() + 1);
-                        //}
-
                         taskRecord.setValue({
                             fieldId: 'duedate',
                             value: seReviewBy // Set the due date
@@ -136,7 +130,7 @@ define(['N/record', 'N/log', 'N/task'],
                             type: record.Type.OPPORTUNITY,
                             id: newRecord.id,
                             values: {
-                                custbody_deal_task_created: true
+                                custbody_se_task_created: true
                             },
                             options: {
                                 enableSourcing: false,
@@ -145,6 +139,11 @@ define(['N/record', 'N/log', 'N/task'],
                         });
 
                         // Log audit information
+                        log.audit({
+                            title: 'Internal ID',
+                            details: 'Tran ID: ' + internalId
+                        });
+
                         log.audit({
                             title: 'Task Created',
                             details: 'Task ID: ' + taskId + ', Opportunity ID: ' + newRecord.id + ', Tran ID: ' + transactionNumber
