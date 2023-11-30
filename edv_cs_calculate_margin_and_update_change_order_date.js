@@ -2,14 +2,12 @@
  * @NApiVersion 2.x
  * @NScriptType ClientScript
  * @NModuleScope SameAccount
- * form 192
  */
 
-define(['N/log', 'N/record'], function(log, record) {
+define(['N/log', 'N/record', 'N/currentRecord', 'N/format'], function(log, record, currentRecord, format) {
 
     function saveRecord(context) {
         try {
-
             var currentRecord = context.currentRecord;
             var customFormId = currentRecord.getValue({
                 fieldId: 'customform'
@@ -17,7 +15,7 @@ define(['N/log', 'N/record'], function(log, record) {
 
             var documentNumber = currentRecord.getValue({
                 fieldId: 'tranid'
-            })
+            });
 
             //Determine which custom form is being used
             if (customFormId ==='143' || customFormId ==='191') {
@@ -373,9 +371,45 @@ define(['N/log', 'N/record'], function(log, record) {
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Total Cost: ' + costAmountServ.toFixed(2)});
                 log.audit({ title: 'Audit Log', details: 'Doc #: ' + documentNumber + ', Service Quote Margin: ' + quoteMarginServ.toFixed(0) });
 
-                
               }
-            
+
+            // Update last change date based on change summary
+            var changeSummary = currentRecord.getValue({
+                fieldId: 'custbody_change_summary'
+            });
+
+            log.audit({
+                title: 'Change Order Summary',
+                details: 'Order Summary: ' + changeSummary
+            })
+
+            var lastChangeDate = currentRecord.getValue({
+                fieldId: 'custbody_last_change_date'
+            });
+
+            log.audit({
+                title: 'Last Date Change',
+                details: 'Date: ' + lastChangeDate
+            })
+
+            if (changeSummary !== null && changeSummary !== '' && lastChangeDate === '') {
+                var currentDate = new Date();
+                var formattedDate = format.format({
+                    value: currentDate,
+                    type: format.Type.DATE
+                });
+
+                currentRecord.setValue({
+                    fieldId: 'custbody_last_change_date',
+                    value: formattedDate
+                });
+
+                log.audit({
+                    title: 'Last Change Date Updated',
+                    details: 'Last Change Date was updated to: ' + formattedDate
+                });
+            }
+
             return true; // Allows the record to be saved
 
         } catch (error) {
@@ -390,5 +424,5 @@ define(['N/log', 'N/record'], function(log, record) {
 
     return {
         saveRecord: saveRecord
-    }
-})
+    };
+});

@@ -12,6 +12,7 @@ define(['N/currentRecord', 'N/format', 'N/log'], function(currentRecord, format,
             var changeSummary = currentRec.getValue({
                 fieldId: 'custbody_change_summary'
             });
+            
 
             if (changeSummary) {
                 var currentDate = new Date();
