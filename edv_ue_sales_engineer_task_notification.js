@@ -58,7 +58,7 @@ define(['N/record', 'N/log', 'N/task'],
                     });
 
                     // Get the transaction ID (tranid) from the Opportunity record
-                    var internalId = opportunityRecord.id;
+                    //var internalId = opportunityRecord.id;
 
                     // Check if the transactionNumber is a valid value
                     if (transactionNumber) {
@@ -139,11 +139,6 @@ define(['N/record', 'N/log', 'N/task'],
                         });
 
                         // Log audit information
-                        log.audit({
-                            title: 'Internal ID',
-                            details: 'Tran ID: ' + internalId
-                        });
-
                         log.audit({
                             title: 'Task Created',
                             details: 'Task ID: ' + taskId + ', Opportunity ID: ' + newRecord.id + ', Tran ID: ' + transactionNumber
