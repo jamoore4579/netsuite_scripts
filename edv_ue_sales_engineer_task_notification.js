@@ -26,7 +26,7 @@ define(['N/record', 'N/log', 'N/task'],
 
             // Check if the task has already been created for this record
             var taskCreated = newRecord.getValue({
-                fieldId: 'custbody_deal_task_created'
+                fieldId: 'custbody_se_task_created'
             })
 
             if (isSeReview && !taskCreated) {
@@ -48,7 +48,7 @@ define(['N/record', 'N/log', 'N/task'],
                     })
 
                     // Get the SE Review Date
-                    var seReviewBy = opportuntiy.getValue({
+                    var seReviewBy = opportunityRecord.getValue({
                         fieldId: 'custbody_se_review_by'
                     })
 
@@ -97,17 +97,17 @@ define(['N/record', 'N/log', 'N/task'],
                         });
 
                         // Set the assigned user ID based on the SE Assigned
-                        if (seAssigned = 1) {
+                        if (seAssigned == 1) {
                             taskRecord.setValue({
                                 fieldId: 'assigned',
                                 value: 1651
                             });
-                        } else if (seAssigned = 2) {
+                        } else if (seAssigned == 2) {
                             taskRecord.setValue({
                                 fieldId: 'assigned',
                                 value: 135
                             });
-                        } else if (seAssigned = 3) {
+                        } else if (seAssigned == 3) {
                             taskRecord.setValue({
                                 fieldId: 'assigned',
                                 value: 1635
@@ -145,11 +145,6 @@ define(['N/record', 'N/log', 'N/task'],
                         });
 
                         // Log audit information
-                        log.audit({
-                            title: 'SE Review Date',
-                            details: 'SE Review By: ' + seReviewBy
-                        });
-
                         log.audit({
                             title: 'Task Created',
                             details: 'Task ID: ' + taskId + ', Opportunity ID: ' + newRecord.id + ', Tran ID: ' + transactionNumber
