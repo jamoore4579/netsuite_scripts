@@ -85,19 +85,14 @@ define(['N/record', 'N/log', 'N/task'],
                             value: 'HIGH'
                         });
 
-                        //taskRecord.setValue({
-                            //fieldId: 'transaction',
-                            //value: transactionNumber
-                        //});
-
-                        taskRecord.setValue({
-                            fieldId: 'message',
-                            value: 'Opportunity: #' + transactionNumber
-                        })
-
                         taskRecord.setValue({
                             fieldId: 'company',
                             value: customerId // Set the customer (company) on record
+                        });
+
+                        taskRecord.setValue({
+                            fieldId: 'transaction',
+                            value: newRecord.id
                         });
 
                         taskRecord.setValue({

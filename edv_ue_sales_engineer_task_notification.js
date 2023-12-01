@@ -62,9 +62,6 @@ define(['N/record', 'N/log', 'N/task'],
                         fieldId: 'title'
                     })
 
-                    // Get the transaction ID (tranid) from the Opportunity record
-                    //var internalId = opportunityRecord.id;
-
                     // Check if the transactionNumber is a valid value
                     if (transactionNumber) {
                         // Create a task record
@@ -84,19 +81,19 @@ define(['N/record', 'N/log', 'N/task'],
                             value: 'HIGH'
                         });
 
-                        //taskRecord.setValue({
-                            //fieldId: 'transaction',
-                            //value: internalId
-                        //});
-
                         taskRecord.setValue({
                             fieldId: 'message',
-                            value: 'Title: ' + opporTitle + '\nOpportunity: #' + transactionNumber
+                            value: 'Title: ' + opporTitle
                         })
 
                         taskRecord.setValue({
                             fieldId: 'company',
                             value: customerId // Set the customer (company) on record
+                        });
+
+                        taskRecord.setValue({
+                            fieldId: 'transaction',
+                            value: newRecord.id
                         });
 
                         taskRecord.setValue({
@@ -163,11 +160,11 @@ define(['N/record', 'N/log', 'N/task'],
                         details: e
                     });
                 }
-            } else if (!isDealRegistration) {
+            } else if (!isSeReview) {
                 // Log audit information if custbody_deal_registration is false
                 log.audit({
                     title: 'Task Not Created',
-                    details: 'Task creation skipped because custbody_deal_registration is false for Opportunity ID: ' + newRecord.id
+                    details: 'Task creation skipped because custbody_se_review is false for Opportunity ID: ' + newRecord.id
                 });
             } else if (taskCreated) {
                 // Log audit information if task has already been created for this record
