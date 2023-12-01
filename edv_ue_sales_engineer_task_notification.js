@@ -57,6 +57,11 @@ define(['N/record', 'N/log', 'N/task'],
                         fieldId: 'tranid'
                     });
 
+                    // Get the Title Information
+                    var opporTitle = opportunityRecord.getValue({
+                        fieldId: 'title'
+                    })
+
                     // Get the transaction ID (tranid) from the Opportunity record
                     //var internalId = opportunityRecord.id;
 
@@ -86,7 +91,7 @@ define(['N/record', 'N/log', 'N/task'],
 
                         taskRecord.setValue({
                             fieldId: 'message',
-                            value: 'Opportunity: #' + transactionNumber
+                            value: 'Title: ' + opporTitle + '\nOpportunity: #' + transactionNumber
                         })
 
                         taskRecord.setValue({
