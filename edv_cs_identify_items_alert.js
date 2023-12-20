@@ -4,7 +4,7 @@
  * @NModuleScope Public
  */
 
-define(['N/log', 'N/record', 'N/currentRecord', 'N/ui/dialog'], function (log, record, currentRecord, dialog) {
+define(['N/log', 'N/record', 'N/currentRecord', 'N/ui/dialog', 'N/runtime'], function (log, record, currentRecord, dialog, runtime) {
 
     function pageInit(context) {
         // This function runs when the page is initialized
