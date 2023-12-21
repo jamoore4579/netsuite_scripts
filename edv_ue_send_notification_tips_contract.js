@@ -2,7 +2,8 @@
  * @NApiVersion 2.x
  * @NScriptType UserEventScript
  */
-define(['N/log', 'N/email', 'N/record'], function(log, email, record) {
+
+define(['N/log', 'N/email', 'N/record', 'N/url'], function(log, email, record, url) {
 
     /**
      * @param {Object} context
@@ -19,9 +20,9 @@ define(['N/log', 'N/email', 'N/record'], function(log, email, record) {
             var newRecord = context.newRecord;
 
             // Check if notification already sent
-            var checkNotification = newRecord.getValue ({
+            var checkNotification = newRecord.getValue({
                 fieldId: 'custbody_contract_notification'
-            })
+            });
 
             log.debug({
                 title: 'Notification Check',
@@ -44,25 +45,20 @@ define(['N/log', 'N/email', 'N/record'], function(log, email, record) {
 
             var salesRep = newRecord.getValue({
                 fieldId: 'salesrep'
-            })
-
-            log.debug({
-                title: 'Nation Field Value',
-                details: nationFieldValues
             });
 
-            if (checkNotification = false) {
+            if (checkNotification === false) {
                 // Modified condition to check if nationFieldValues is 4, 5, 6, 7, 8, 9, 10, 11, or 12
                 if (nationFieldValues >= 4 && nationFieldValues <= 12) {
 
                     var emailBody = 'Notification message for Sales Order: ' + transactionId + '\n';
-                    emailBody += 'Purchasing Contract: ' + nationFieldText
+                    emailBody += 'Purchasing Contract: ' + nationFieldText + '\n';
 
                     // Send email to user 3578
                     email.send({
                         author: salesRep, // The internal ID of the user sending the email
                         recipients: 'jmoore@weendeavor.com', // Replace with the actual email address of user 3578
-                        subject: 'Notification for Transaction ' + transactionId,
+                        subject: 'TIPS Purchasing Contract Transaction ' + transactionId,
                         body: emailBody
                     });
 
@@ -89,14 +85,12 @@ define(['N/log', 'N/email', 'N/record'], function(log, email, record) {
                 log.debug({
                     title: 'Notification Check',
                     details: 'Notification Already Sent.' 
-                })
+                });
             }
         }
-
     }
 
     return {
         afterSubmit: afterSubmit
     };
-
 });
