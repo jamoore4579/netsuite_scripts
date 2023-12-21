@@ -17,6 +17,16 @@ define(['N/log', 'N/email', 'N/record'], function(log, email, record) {
             
             // Get the new record
             var newRecord = context.newRecord;
+
+            // Check if notification already sent
+            var checkNotification = newRecord.getValue ({
+                fieldId: 'custbody_contract_notification'
+            })
+
+            log.debug({
+                title: 'Notification Check',
+                details: checkNotification
+            });
             
             // Check if the field custbody_purchasing_contract_nation has a value
             var nationFieldValues = newRecord.getValue({
@@ -65,7 +75,7 @@ define(['N/log', 'N/email', 'N/record'], function(log, email, record) {
                     type: newRecord.type,
                     id: newRecord.id,
                     values: {
-                        custbody_notification_sent: true
+                        custbody_contract_notification: true
                     }
                 });
             } else {
