@@ -52,26 +52,25 @@ define(['N/log', 'N/email', 'N/record', 'N/url'], function(log, email, record, u
                 // Check if nationFieldValues corresponds to values 4 through 12 and include corresponding text in the email body
                 if (nationFieldValues >= 4 && nationFieldValues <= 12) {
                     var emailBody = 'Notification message for Sales Order: ' + transactionId + '\n';
-                    emailBody += 'Purchasing Contract (Value): ' + nationFieldValues + '\n';
 
                     // Check nationFieldValues for specific cases and add corresponding additional information to the email body
-                    if (nationFieldValues === 4) {
+                    if (nationFieldValues == 4) {
                         emailBody += 'Additional Information: TIPS 200904 – Audio Visual Equipment, Supplies and Services\n';
-                    } else if (nationFieldValues === 5) {
+                    } else if (nationFieldValues == 5) {
                         emailBody += 'Additional Information: TIPS 210902 – Classroom and Teaching Aids Goods and Services\n';
-                    } else if (nationFieldValues === 6) {
+                    } else if (nationFieldValues == 6) {
                         emailBody += 'Additional Information: TIPS 200601 – Consulting and Other Related Services\n';
-                    } else if (nationFieldValues === 7) {
+                    } else if (nationFieldValues == 7) {
                         emailBody += 'Additional Information: TIPS 210103 – Copiers, Fax, Multifunction Machines and Services\n';
-                    } else if (nationFieldValues === 8) {
+                    } else if (nationFieldValues == 8) {
                         emailBody += 'Additional Information: TIPS 200301 – Furniture, Furnishings and Services\n';
-                    } else if (nationFieldValues === 9) {
+                    } else if (nationFieldValues == 9) {
                         emailBody += 'Additional Information: TIPS 21050301 – Networking Equipment, Software and Services\n';
-                    } else if (nationFieldValues === 10) {
+                    } else if (nationFieldValues == 10) {
                         emailBody += 'Additional Information: TIPS 220105 – Technology Solutions Products and Services\n';
-                    } else if (nationFieldValues === 11) {
+                    } else if (nationFieldValues == 11) {
                         emailBody += 'Additional Information: TIPS 210303 – Telephone and Communications Data Systems and Solutions\n';
-                    } else if (nationFieldValues === 12) {
+                    } else if (nationFieldValues == 12) {
                         emailBody += 'Additional Information: TIPS 200306 – Vaping Sensors\n';
                     }
 
