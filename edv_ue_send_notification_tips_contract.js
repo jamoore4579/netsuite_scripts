@@ -29,14 +29,19 @@ define(['N/log', 'N/email', 'N/record', 'N/url'], function(log, email, record, u
                 details: checkNotification
             });
             
-            // Check if the field custbody_purchasing_contract_nation has a value
+            // Retrieve the text and value of the field custbody_purchasing_contract_nation
+            var nationFieldValue = newRecord.getText({
+                fieldId: 'custbody_purchasing_contract_nation'
+            });
+            
             var nationFieldValues = newRecord.getValue({
                 fieldId: 'custbody_purchasing_contract_nation'
             });
 
-            var nationFieldText = newRecord.getText({
-                fieldId: 'custbody_purchasing_contract_nation'
-            });
+            log.debug({
+                title: 'Contract Text',
+                details: nationFieldValue
+            })
 
             // Get the transaction ID
             var transactionId = newRecord.getValue({
@@ -52,7 +57,8 @@ define(['N/log', 'N/email', 'N/record', 'N/url'], function(log, email, record, u
                 if (nationFieldValues >= 4 && nationFieldValues <= 12) {
 
                     var emailBody = 'Notification message for Sales Order: ' + transactionId + '\n';
-                    emailBody += 'Purchasing Contract: ' + nationFieldText + '\n';
+                    emailBody += 'Purchasing Contract: ' + nationFieldValue + '\n';
+                    emailBody += 'Purchasing Contract (Value): ' + nationFieldValues + '\n';
 
                     // Send email to user 3578
                     email.send({
