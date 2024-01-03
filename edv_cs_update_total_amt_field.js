@@ -14,7 +14,7 @@ define(['N/log', 'N/record'], function(log, record) {
     });
 
     // Determine which custom form is being used
-    if (customFormId === '143') {
+    if (customFormId === '143' || customFormId === '191') {
 
       var lineCount = currentRecord.getLineCount({
         sublistId: 'item'
