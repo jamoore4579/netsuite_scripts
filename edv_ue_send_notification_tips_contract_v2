@@ -3,7 +3,7 @@
  * @NScriptType UserEventScript
  */
 
-define(['N/log', 'N/email', 'N/record', 'N/task'], function(log, email, record, task) {
+define(['N/log', 'N/record', 'N/task'], function(log, record, task) {
 
     /**
      * @param {Object} context
@@ -75,35 +75,43 @@ define(['N/log', 'N/email', 'N/record', 'N/task'], function(log, email, record, 
                     }
 
                     // Create a scheduled task to send email after 10 seconds
-                    var scriptTask = task.create({
+                    var scheduledTask = task.create({
                         taskType: task.TaskType.SCHEDULED_SCRIPT
                     });
 
-                    scriptTask.scriptId = 'customscript_send_email_script'; // Replace with your scheduled script ID for sending emails
-                    scriptTask.deploymentId = 'customdeploy_send_email_script'; // Replace with your scheduled script deployment ID
-                    scriptTask.params = {
+                    scheduledTask.scriptId = 'customscript_contract_notification'; // Replace with your scheduled script ID for sending emails
+                    scheduledTask.deploymentId = 'customdeploy_contract_notific'; // Replace with your scheduled script deployment ID
+                    scheduledTask.params = {
                         author: salesRep,
                         recipient: 'jmoore@weendeavor.com',
                         subject: 'TIPS Purchasing Contract Transaction ' + transactionId,
                         body: emailBody
                     };
-                    scriptTask.delayInSeconds = 10; // 10 seconds delay
+                    scheduledTask.delayInSeconds = 10; // 10 seconds delay
 
-                    var taskId = scriptTask.submit();
+                    try {
+                        var taskId = scheduledTask.submit();
+                        log.debug({
+                            title: 'Scheduled Task Created',
+                            details: 'Email will be sent after 10 seconds.' + taskId
+                        });
 
-                    log.debug({
-                        title: 'Scheduled Task Created',
-                        details: 'Email will be sent after 10 seconds.'
-                    });
+                        // Mark the notification as sent to avoid sending it again (optional: can be moved to the scheduled script)
+                        record.submitFields({
+                            type: newRecord.type,
+                            id: newRecord.id,
+                            values: {
+                                custbody_contract_notification: true
+                            }
+                        });
 
-                    // Mark the notification as sent to avoid sending it again (optional: can be moved to the scheduled script)
-                    record.submitFields({
-                        type: newRecord.type,
-                        id: newRecord.id,
-                        values: {
-                            custbody_contract_notification: true
-                        }
-                    });
+                    } catch (submitError) {
+                        log.error({
+                            title: 'Error Submitting Task',
+                            details: submitError
+                        });
+                    }
+                    
                 } else {
                     log.debug({
                         title: 'Condition Not Met',
