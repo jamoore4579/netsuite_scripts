@@ -91,7 +91,7 @@ define(['N/currentRecord', 'N/record', 'N/log', 'N/ui/message'],
                 daysOverdue >= 90 &&
                 overdueBalance > 0
             ) {
-                var alertMessage = 'Customer on Credit Hold. Overdue Balance: $' + overdueBalance;
+                var alertMessage = 'This customer currently has an outstanding balance over 90 days old. You will NOT be able to process any orders for them until they bring their account up to date.';
                 window.alert(alertMessage);
             }
         }
