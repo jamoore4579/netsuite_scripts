@@ -8,19 +8,46 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
         try {
             // Load the saved search
             var savedSearchId = '3278';
-            var savedSearch = search.load({ id: savedSearchId });
+            var savedSearch = search.load({
+                id: savedSearchId
+            });
 
             // Run the search
             var resultSet = savedSearch.run();
-            resultSet.each(function (result) {
-                // Get values from the search result
-                var documentNumber = result.getValue({ name: 'tranid' });
-                var salesRep = result.getValue({ name: 'salesrep' });
-                var nationFieldValues = result.getValue({ name: 'custbody_purchasing_contract_nation' });
 
-                // Check if the nationFieldValues is between 4 and 12
+            // Iterate over the result set
+            resultSet.each(function (result) {
+                // Retrieve values from the result
+                var documentNumber = result.getValue({
+                    name: 'tranid'
+                });
+
+                log.debug({
+                    title: 'Document Number',
+                    details: documentNumber
+                });
+
+                var salesRep = result.getValue({
+                    name: 'salesrep'
+                });
+
+                log.debug({
+                    title: 'Sales Rep',
+                    details: salesRep
+                });
+
+                var nationFieldValues = result.getValue({
+                    name: 'custbody_purchasing_contract_nation'
+                });
+
+                log.debug({
+                    title: 'Contract',
+                    details: nationFieldValues
+                });
+
+                // Check if nationFieldValues corresponds to values 4 through 12 and include corresponding text in the email body
                 if (nationFieldValues >= 4 && nationFieldValues <= 12) {
-                    // Build email body
+
                     var emailBody = 'Notification message for Sales Order: ' + documentNumber + '\n';
 
                     // Check nationFieldValues for specific cases and add corresponding additional information to the email body
@@ -44,10 +71,10 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
                         emailBody += 'Additional Information: TIPS 200306 – Vaping Sensors\n';
                     }
 
-                    // Send email
+                    // Send email to user 3578
                     email.send({
-                        author: salesRep,
-                        recipients: 'jmoore@weendeavor.com',
+                        author: salesRep, // The internal ID of the user sending the email
+                        recipients: 3578, // Replace with the actual email address of user 3578
                         subject: 'TIPS Purchasing Contract Transaction ' + documentNumber,
                         body: emailBody
                     });
@@ -57,27 +84,34 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
                         details: 'Email sent for Sales Order: ' + documentNumber
                     });
 
-                    // Update record to set custbody_contract_notification to true
+                    // Mark the notification as sent to avoid sending it again
                     record.submitFields({
-                        type: record.Type.SALES_ORDER,
+                        type: 'salesOrder',
                         id: result.id,
                         values: {
                             custbody_contract_notification: true
-                        },
-                        options: {
-                            enableSourcing: false,
-                            ignoreMandatoryFields: true
                         }
+                    });
+
+                } else {
+                    log.debug({
+                        title: 'Condition Not Met',
+                        details: 'Notification should not be sent.'
                     });
                 }
 
-                return true; // Continue processing next result
+                // Continue processing next result
+                return true;
             });
 
-        } catch (error) {
+            log.debug({
+                title: 'Email Notification Sent',
+                details: documentNumber + salesRep + nationFieldValues
+            });
+        } catch (e) {
             log.error({
-                title: 'Error Processing Script',
-                details: error
+                title: 'Error',
+                details: 'An error occurred: ' + e
             });
         }
     }
