@@ -86,7 +86,7 @@ define(['N/record', 'N/search', 'N/email'], function(record, search, email) {
 
             // Mark the notification as sent to avoid sending it again
             record.submitFields({
-                type: result.type,
+                type: 'salesOrder',
                 id: result.id,
                 values: {
                     custbody_contract_notification: true
