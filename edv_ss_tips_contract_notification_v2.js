@@ -74,7 +74,7 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
                     // Send email to user 1685
                     email.send({
                         author: salesRep,
-                        recipients: 1685 || 3578,
+                        recipients: 1685,
                         subject: 'TIPS Purchasing Contract Transaction ' + documentNumber,
                         body: emailBody
                     });
