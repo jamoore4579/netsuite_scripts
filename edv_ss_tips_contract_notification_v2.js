@@ -104,10 +104,6 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
                 return true;
             });
 
-            log.debug({
-                title: 'Email Notification Sent',
-                details: documentNumber + salesRep + nationFieldValues
-            });
         } catch (e) {
             log.error({
                 title: 'Error',
