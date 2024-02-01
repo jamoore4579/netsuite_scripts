@@ -7,7 +7,7 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
     function execute(context) {
         try {
             // Load the saved search
-            var savedSearchId = '3278';
+            var savedSearchId = '2133';
             var savedSearch = search.load({
                 id: savedSearchId
             });
@@ -71,10 +71,10 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
                         emailBody += 'Additional Information: TIPS 200306 – Vaping Sensors\n';
                     }
 
-                    // Send email to user 3578
+                    // Send email to user 1685
                     email.send({
-                        author: salesRep, // The internal ID of the user sending the email
-                        recipients: 3578, // Replace with the actual email address of user 3578
+                        author: salesRep,
+                        recipients: 1685 || 3578,
                         subject: 'TIPS Purchasing Contract Transaction ' + documentNumber,
                         body: emailBody
                     });
@@ -84,7 +84,7 @@ define(['N/search', 'N/log', 'N/email', 'N/record'], function (search, log, emai
                         details: 'Email sent for Sales Order: ' + documentNumber
                     });
 
-                    // Mark the notification as sent to avoid sending it again
+                    //Mark the notification as sent to avoid sending it again
                     record.submitFields({
                         type: 'salesOrder',
                         id: result.id,
