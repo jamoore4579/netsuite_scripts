@@ -14,7 +14,7 @@ define(['N/record', 'N/log', 'N/task'],
          */
 
         function afterSubmit(context) {
-            
+
 
             // Get the new record
             var newRecord = context.newRecord;
@@ -64,68 +64,82 @@ define(['N/record', 'N/log', 'N/task'],
 
                     // Check if the transactionNumber is a valid value
                     if (transactionNumber) {
-                        // Create a task record
-                        var taskRecord = record.create({
-                            type: record.Type.TASK,
-                            isDynamic: true
-                        });
-
-                        // Set task fields
-                        taskRecord.setValue({
-                            fieldId: 'title',
-                            value: 'Please complete SE Review for Opportunity# ' + transactionNumber
-                        });
-
-                        taskRecord.setValue({
-                            fieldId: 'priority',
-                            value: 'HIGH'
-                        });
-
-                        taskRecord.setValue({
-                            fieldId: 'message',
-                            value: 'Title: ' + opporTitle
-                        })
-
-                        taskRecord.setValue({
-                            fieldId: 'company',
-                            value: customerId // Set the customer (company) on record
-                        });
-
-                        taskRecord.setValue({
-                            fieldId: 'transaction',
-                            value: newRecord.id
-                        });
-
-                        taskRecord.setValue({
-                            fieldId: 'custevent_task_type',
-                            value: 107 // Set the task type on record
-                        });
-
-                        // Set the assigned user ID based on the SE Assigned
-                        if (seAssigned == 1) {
-                            taskRecord.setValue({
-                                fieldId: 'assigned',
-                                value: 1651
+                        // Loop through each selected user in seAssigned
+                        for (var i = 0; i < seAssigned.length; i++) {
+                            // Create a task record
+                            var taskRecord = record.create({
+                                type: record.Type.TASK,
+                                isDynamic: true
                             });
-                        } else if (seAssigned == 2) {
+
+                            // Set task fields
                             taskRecord.setValue({
-                                fieldId: 'assigned',
-                                value: 135
+                                fieldId: 'title',
+                                value: 'Please complete SE Review for Opportunity# ' + transactionNumber
                             });
-                        } else if (seAssigned == 3) {
+
                             taskRecord.setValue({
-                                fieldId: 'assigned',
-                                value: 1635
+                                fieldId: 'priority',
+                                value: 'HIGH'
+                            });
+
+                            taskRecord.setValue({
+                                fieldId: 'message',
+                                value: 'Title: ' + opporTitle
+                            })
+
+                            taskRecord.setValue({
+                                fieldId: 'company',
+                                value: customerId // Set the customer (company) on record
+                            });
+
+                            taskRecord.setValue({
+                                fieldId: 'transaction',
+                                value: newRecord.id
+                            });
+
+                            taskRecord.setValue({
+                                fieldId: 'custevent_task_type',
+                                value: 107 // Set the task type on record
+                            });
+
+                            // Set the assigned user ID based on the selected user in seAssigned
+                            if (seAssigned[i] == 1) {
+                                taskRecord.setValue({
+                                    fieldId: 'assigned',
+                                    value: 1651
+                                });
+                            } else if (seAssigned[i] == 2) {
+                                taskRecord.setValue({
+                                    fieldId: 'assigned',
+                                    value: 135
+                                });
+                            } else if (seAssigned[i] == 3) {
+                                taskRecord.setValue({
+                                    fieldId: 'assigned',
+                                    value: 1635
+                                });
+                            } else if (seAssigned[i] == 101) {
+                                taskRecord.setValue({
+                                    fieldId: 'assigned',
+                                    value: 1683
+                                });
+                            }
+
+                            taskRecord.setValue({
+                                fieldId: 'duedate',
+                                value: seReviewBy // Set the due date
+                            });
+
+                            // Save the task record
+                            var taskId = taskRecord.save();
+
+                            // Log audit information
+                            log.audit({
+                                title: 'Task Created',
+                                details: 'Task ID: ' + taskId + ', Opportunity ID: ' + newRecord.id + ', Tran ID: ' + transactionNumber
                             });
                         }
-
-                        taskRecord.setValue({
-                            fieldId: 'duedate',
-                            value: seReviewBy // Set the due date
-                        });
-
-                        // Save the task record
-                        var taskId = taskRecord.save();
 
                         // Update the custom field to indicate that the task has been created
                         record.submitFields({
@@ -138,12 +152,6 @@ define(['N/record', 'N/log', 'N/task'],
                                 enableSourcing: false,
                                 ignoreMandatoryFields: true
                             }
-                        });
-
-                        // Log audit information
-                        log.audit({
-                            title: 'Task Created',
-                            details: 'Task ID: ' + taskId + ', Opportunity ID: ' + newRecord.id + ', Tran ID: ' + transactionNumber
                         });
 
                     } else {
