@@ -10,7 +10,8 @@ define(['N/record'], function (record) {
       var currentRecord = context.currentRecord;
       var fieldId = context.fieldId;
 
-      // Check if the current form ID is '160'
+      //Quote Request Task form ID is 158
+      // Check if the current form ID is '158'
       var currentFormId = currentRecord.getValue({ fieldId: 'customform' });
       if (currentFormId !== '158') {
         // Skip the script execution for other forms

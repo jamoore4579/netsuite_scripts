@@ -10,6 +10,7 @@ define(['N/record'], function (record) {
       var currentRecord = context.currentRecord;
       var fieldId = context.fieldId;
 
+      // Item Add Task form ID is 157
       // Check if the current form ID is '157'
       var currentFormId = currentRecord.getValue({ fieldId: 'customform' });
       if (currentFormId !== '157') {
