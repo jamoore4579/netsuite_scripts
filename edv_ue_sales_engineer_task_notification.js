@@ -109,21 +109,31 @@ define(['N/record', 'N/log', 'N/task'],
                                     fieldId: 'assigned',
                                     value: 1651
                                 });
+
                             } else if (seAssigned[i] == 2) {
                                 taskRecord.setValue({
                                     fieldId: 'assigned',
                                     value: 135
                                 });
+
                             } else if (seAssigned[i] == 3) {
                                 taskRecord.setValue({
                                     fieldId: 'assigned',
                                     value: 1635
                                 });
+
                             } else if (seAssigned[i] == 101) {
                                 taskRecord.setValue({
                                     fieldId: 'assigned',
                                     value: 1683
                                 });
+
+                            } else if (seAssigned[i] == 102) {
+                                taskRecord.setValue({
+                                    fieldId: 'assigned',
+                                    value: 1639
+                                });
+
                             }
 
                             taskRecord.setValue({
