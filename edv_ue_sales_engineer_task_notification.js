@@ -52,6 +52,11 @@ define(['N/record', 'N/log', 'N/task'],
                         fieldId: 'custbody_se_review_by'
                     })
 
+                    // Get the Opportunity Type
+                    var opportunityType = opportunityRecord.getValue({
+                        fieldId: 'custbody_opportunity_type'
+                    })
+
                     // Get the transaction ID (tranid) from the Opportunity record
                     var transactionNumber = opportunityRecord.getValue({
                         fieldId: 'tranid'
@@ -98,6 +103,19 @@ define(['N/record', 'N/log', 'N/task'],
                                 value: newRecord.id
                             });
 
+                            // Set the Opportunity Type
+                            if (opportunityType == 1) {
+                                taskRecord.setValue({
+                                    fieldId: 'custevent_opportunity_type',
+                                    value: 'Install'
+                                });
+                            } else if (opportunityType == 2) {
+                                taskRecord.setValue({
+                                    fieldId: 'custevent_opportunity_type',
+                                    value: 'Drop-ship'
+                                });
+                            }
+
                             taskRecord.setValue({
                                 fieldId: 'custevent_task_type',
                                 value: 107 // Set the task type on record
@@ -114,12 +132,6 @@ define(['N/record', 'N/log', 'N/task'],
                                 taskRecord.setValue({
                                     fieldId: 'assigned',
                                     value: 135
-                                });
-
-                            } else if (seAssigned[i] == 3) {
-                                taskRecord.setValue({
-                                    fieldId: 'assigned',
-                                    value: 1635
                                 });
 
                             } else if (seAssigned[i] == 101) {
